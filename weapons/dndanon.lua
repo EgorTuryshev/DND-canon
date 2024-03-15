@@ -1,7 +1,8 @@
 dofile("mods/dlc1_weapons/weapons/howitzer.lua")
 dofile("scripts/device_utility.lua")
+
 Sprites = {}
-Projectile = "dndanon"
+Projectile = "shell1"
 FireEffect = "mods/dlc1_weapons/effects/fire_howitzer.lua"
 ShellEffect = "mods/dlc1_weapons/effects/shell_eject_howitzer.lua"
 ConstructEffect = "effects/device_upgrade.lua"
@@ -59,10 +60,6 @@ end
 local base = FindSpriteComponent(Root, "Howitzer")
 if base then
     base.Sprite = path .. "/weapons/sprites/base.png"
-end
-local shell = FindSpriteComponent(Root, "shell")
-if shell then
-    shell.Sprite = path .. "/weapons/sprites/shell20.png"
 end
 
 Root = 
