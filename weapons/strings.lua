@@ -1,5 +1,6 @@
 Merge(Weapon,
 {
 	dndanon = L"dndanon",
-	dndanonTip = L"Upgrade Cost: 500 Metal, 4000 Energy.",
+	dndanonTip2 = L"Some tip",
+	dndanonTip3 = L"Some tip 2",
 })

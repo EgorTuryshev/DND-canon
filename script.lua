@@ -28,12 +28,21 @@ function OnWeaponFiredpcall(teamId, saveName, weaponId, projectileNodeId, projec
 end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
-    local selectedShell = GetRandomIntegerLocal(1, 2)
-    local proj = "shell1"
-    if selectedShell == 2 then
-        proj = "shell20"
-    end
+    local shells = {"shell1", "shell2", "shell3", "shell4", "shell5", 
+                "shell6", "shell7", "shell8", "shell9", "shell10",
+                "shell11", "shell12", "shell13", "shell14", "shell15",
+                "shell16", "shell17", "shell18", "shell19", "shell20"}
+    local selectedIndex = GetRandomIntegerLocal(1, #shells)
+    local proj = shells[selectedIndex]
+
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
+
+    if selectedIndex == 1 then
+        DoShell_1_Script(origWeaponId)
+    elseif selectedIndex == 20 then
+        DoShell_20_Script(proj, teamId, pos, velocity, age, projectileId)
+    end
+
     if origWeaponId > 0 then
         NoColProjectileEnd(projectileId,0)
     else
@@ -70,6 +79,38 @@ function RGBAtoHex(r, g, b, a, UTF16)
     local hex = string.format("%02X%02X%02X%02X", r, g, b, a)
     if UTF16 == true then return L"[HL=" .. towstring(hex) .. L"]" else return "[HL=" .. hex .. "]" end
 end
+
+function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeaponId)
+	local rad = math.pi / 180
+	local sin_angle = math.sin(degreeAngle * rad)
+	local cos_angle = math.cos(degreeAngle * rad)
+	
+	local deviation = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle), age)	
+
+    local agetrigger = GetNodeProjectileAgeTrigger(origWeaponId)
+
+    if origWeaponId > 0 then
+        NoColProjectileEnd(deviation,0)
+    else
+        SetNodeProjectileAgeTrigger(deviation,0.1)
+    end
+    if agetrigger and agetrigger > 0 then
+        data.AgeTriggers[deviation] = agetrigger
+    end
+end
+
+--------------------------------------------------------------------------------------------------------------
+
+function DoShell_1_Script (origWeaponId)
+    ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
+end
+
+function DoShell_20_Script (proj, teamId, pos, velocity, age, projectileId)
+    CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
+    CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
+end
+
+--------------------------------------------------------------------------------------------------------------
 
 function LogDebug(s) if RPdebug then Log(s) end end
 

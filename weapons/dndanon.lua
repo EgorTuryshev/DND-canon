@@ -21,6 +21,12 @@ MetalFireCost = 120
 EnergyFireCost = 6500
 Recoil = 3000000
 
+FireStdDev = 0.005
+FireStdDevAuto = 0.005
+RoundsEachBurst = 5
+RoundPeriod = 0.1
+RetriggerFireEffect = true
+
 Sprites = 
 {
     {
@@ -52,15 +58,6 @@ Sprites =
         }
     }
 }
-
-local barrel = FindSpriteComponent(Root, "Barrel")
-if barrel then
-    barrel.Sprite = path .. "/weapons/sprites/barrel.png"
-end
-local base = FindSpriteComponent(Root, "Howitzer")
-if base then
-    base.Sprite = path .. "/weapons/sprites/base.png"
-end
 
 Root = 
 {
