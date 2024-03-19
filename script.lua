@@ -3,7 +3,7 @@ dofile("scripts/forts.lua")
 local RPdebug = true
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
-    if weaponId ~= -1 then
+    if weaponId ~= -1 and saveName == "dndanon" then
         ProtectedFunction(OnWeaponFiredpcall,teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     end
 end
@@ -33,12 +33,17 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell11", "shell12", "shell13", "shell14", "shell15",
                 "shell16", "shell17", "shell18", "shell19", "shell20"}
     local selectedIndex = GetRandomIntegerLocal(1, #shells)
+
+    --selectedIndex = 6
+    
     local proj = shells[selectedIndex]
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
 
     if selectedIndex == 1 then
         DoShell_1_Script(origWeaponId)
+    elseif selectedIndex == 6 then
+        DoShell_6_Script(proj, teamId, pos, velocity, age, projectileId)
     elseif selectedIndex == 20 then
         DoShell_20_Script(proj, teamId, pos, velocity, age, projectileId)
     end
@@ -99,12 +104,41 @@ function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeap
     end
 end
 
+function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroyType)
+    local name = GetNodeProjectileSaveName(nodeId)
+    if name == "shell6" and destroyType == 2 then
+        local velocity = NodeVelocity(nodeId)
+        local pos = NodePosition(nodeId)
+        local age = GetNodeProjectileTimeRemaining(nodeId)
+        if teamId == 1 then
+            teamId = 2
+        else
+            teamId = 1
+        end
+        CreateDeviation(-180, name, teamId, pos, velocity, age, nodeId)
+    end
+end
+
 --------------------------------------------------------------------------------------------------------------
 
 function DoShell_1_Script (origWeaponId)
     ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
 end
+function DoShell_2_Script (proj, teamId, pos, velocity, age, projectileId)
 
+end
+function DoShell_3_Script (proj, teamId, pos, velocity, age, projectileId)
+
+end
+function DoShell_4_Script (proj, teamId, pos, velocity, age, projectileId)
+
+end
+function DoShell_5_Script (proj, teamId, pos, velocity, age, projectileId)
+
+end
+function DoShell_6_Script (proj, teamId, pos, velocity, age, projectileId)
+
+end
 function DoShell_20_Script (proj, teamId, pos, velocity, age, projectileId)
     CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
     CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)

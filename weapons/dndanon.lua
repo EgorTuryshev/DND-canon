@@ -21,11 +21,11 @@ MetalFireCost = 120
 EnergyFireCost = 6500
 Recoil = 3000000
 
-FireStdDev = 0.005
+--[[ FireStdDev = 0.005
 FireStdDevAuto = 0.005
 RoundsEachBurst = 5
 RoundPeriod = 0.1
-RetriggerFireEffect = true
+RetriggerFireEffect = true ]]
 
 Sprites = 
 {
