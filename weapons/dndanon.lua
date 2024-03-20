@@ -66,7 +66,7 @@ Root =
     UserData = 0,
     Angle = 0,
     Pivot = { 0, -0.46 },
-    PivotOffset = { 0, -0.05 },
+    -- PivotOffset = { 0, -0.05 },
     ChildrenBehind = 
     {
         {
@@ -74,8 +74,8 @@ Root =
             Name = "Head",
             UserData = 50,
             Angle = 0,
-            Pivot = { 0.07, -0.37 },
-            PivotOffset = { 0.2, -0.12 },
+            Pivot = {-0.175, -0.29245283018867924},
+            PivotOffset = {0.25092936802973975, -0.11990950226244344},
             ChildrenInFront = 
             {
                 {
