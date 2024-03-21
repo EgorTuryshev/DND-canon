@@ -2,6 +2,7 @@ dofile("mods/dlc1_weapons/weapons/howitzer.lua")
 dofile("scripts/device_utility.lua")
 
 Sprites = {}
+--FireDelay = 3
 Projectile = "shell1"
 FireEffect = "mods/dlc1_weapons/effects/fire_howitzer.lua"
 ShellEffect = "mods/dlc1_weapons/effects/shell_eject_howitzer.lua"
