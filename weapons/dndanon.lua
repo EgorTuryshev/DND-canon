@@ -3,7 +3,8 @@ dofile("scripts/device_utility.lua")
 
 Sprites = {}
 Projectile = "shell1"
-FireEffect = "mods/dlc1_weapons/effects/fire_howitzer.lua"
+--FireEffect = "mods/dlc1_weapons/effects/fire_howitzer.lua"
+FireEffect = path .. "/effects/dice_roll.lua"
 ShellEffect = "mods/dlc1_weapons/effects/shell_eject_howitzer.lua"
 ConstructEffect = "effects/device_upgrade.lua"
 CompleteEffect = "effects/device_complete.lua"
@@ -19,7 +20,24 @@ StructureSplashDamage = 1000
 ProjectileSplashDamageMaxRadius = 1000
 MetalFireCost = 120
 EnergyFireCost = 6500
-Recoil = 3000000
+Recoil = 2000000
+-------------------------------------
+FireDelay = 1
+BarrelLength = 103.875
+BarrelRecoilLimit = -0.65
+BarrelRecoilSpeed = -7
+BarrelReturnForce = 0.6
+
+Scale = 1
+SelectionWidth = 70.0
+SelectionHeight = 40.0
+SelectionOffset = { 0.0, -48.5 }
+RecessionBox =
+{
+	Size = { 200, 25 },
+	Offset = { -230, -50 },
+}
+-------------------------------------
 
 --[[ FireStdDev = 0.005
 FireStdDevAuto = 0.005
@@ -51,6 +69,20 @@ Sprites =
             {
                 Frames = 
                 {
+                    { texture = path .. "/weapons/sprites/head.png"},
+                    mipmap = true
+                }
+            },
+        }
+    },
+	{
+        Name = "dndanon-barrel",
+        States = 
+        {
+            Normal = 
+            {
+                Frames = 
+                {
                     { texture = path .. "/weapons/sprites/barrel.png"},
                     mipmap = true
                 }
@@ -66,7 +98,7 @@ Root =
     UserData = 0,
     Angle = 0,
     Pivot = { 0, -0.46 },
-    -- PivotOffset = { 0, -0.05 },
+    PivotOffset = { 0, 0 },
     ChildrenBehind = 
     {
         {
@@ -75,22 +107,32 @@ Root =
             UserData = 50,
             Angle = 0,
             Pivot = {-0.175, -0.29245283018867924},
-            PivotOffset = {0.25092936802973975, -0.11990950226244344},
-            ChildrenInFront = 
-            {
-                {
-                    Pivot = { 0, 0},
-                    Angle = 90,
-                    Name = "Hardpoint0",
-                    PivotOffset = { 0, 0 }
-                },
-                {
-                    Pivot = { -0.05 , -0.5 },
-                    Angle = 0,
-                    Name = "Chamber",
-                    PivotOffset = { 0, 0 },
-                }
-            },
+            PivotOffset = {0.02861952861952862, -0.0982532751091703},
+			
+			ChildrenBehind =
+			{
+				{
+					Name = "Barrel",
+					Angle = 0,
+					Pivot ={0.85, 0.07275109170305677},
+					PivotOffset = { 0.0, 0 },
+					Sprite = "dndanon-barrel",
+					UserData = 100,
+				},
+				{
+					Name = "Hardpoint0",
+					Angle = 90,
+					Pivot = {0.37542087542087543, 0.03275109170305677},
+					PivotOffset = { 0, 0 },
+				},
+				{
+					Name = "Chamber",
+					Angle = 0,
+					Pivot = {-0.43265993265993263, -0.39082969432314413},
+					PivotOffset = { 0, 0 },
+				},
+				
+			},
         },
         {
             Name = "Icon",
