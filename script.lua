@@ -32,7 +32,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell6", "shell7", "shell8", "shell9", "shell10",
                 "shell11", "shell12", "shell13", "shell14", "shell15",
                 "shell16", "shell17", "shell18", "shell19", "shell20"}
-    local selectedIndex = GetRandomIntegerLocal(1, #shells)
+    local selectedIndex = GetRandomIntegerLocal(1, #shells) --replays might not work correctly
 
     --selectedIndex = 6
     
@@ -41,11 +41,45 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
 
     if selectedIndex == 1 then
-        DoShell_1_Script(origWeaponId)
+        DoShell_1_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 2 then
+        DoShell_2_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 3 then
+        DoShell_3_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 4 then
+        DoShell_4_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 5 then
+        DoShell_5_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     elseif selectedIndex == 6 then
-        DoShell_6_Script(proj, teamId, pos, velocity, age, projectileId)
+        DoShell_6_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 7 then
+        DoShell_7_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 8 then
+        DoShell_8_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 9 then
+        DoShell_9_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 10 then
+        DoShell_10_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 11 then
+        DoShell_11_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 12 then
+        DoShell_12_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 13 then
+        DoShell_13_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 14 then
+        DoShell_14_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 15 then
+        DoShell_15_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 16 then
+        DoShell_16_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 17 then
+        DoShell_17_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 18 then
+        DoShell_18_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 19 then
+        DoShell_19_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     elseif selectedIndex == 20 then
-        DoShell_20_Script(proj, teamId, pos, velocity, age, projectileId)
+        DoShell_20_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end
 
     if origWeaponId > 0 then
@@ -121,25 +155,66 @@ end
 
 --------------------------------------------------------------------------------------------------------------
 
-function DoShell_1_Script (origWeaponId)
+function DoShell_1_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_1.lua", GetWeaponHardpointPosition(origWeaponId))
     ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
 end
-function DoShell_2_Script (proj, teamId, pos, velocity, age, projectileId)
-
+function DoShell_2_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_2.lua", GetWeaponHardpointPosition(origWeaponId))
 end
-function DoShell_3_Script (proj, teamId, pos, velocity, age, projectileId)
-
+function DoShell_3_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_3.lua", GetWeaponHardpointPosition(origWeaponId))
 end
-function DoShell_4_Script (proj, teamId, pos, velocity, age, projectileId)
-
+function DoShell_4_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_4.lua", GetWeaponHardpointPosition(origWeaponId))
 end
-function DoShell_5_Script (proj, teamId, pos, velocity, age, projectileId)
-
+function DoShell_5_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_5.lua", GetWeaponHardpointPosition(origWeaponId))
 end
-function DoShell_6_Script (proj, teamId, pos, velocity, age, projectileId)
-
+function DoShell_6_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_6.lua", GetWeaponHardpointPosition(origWeaponId))
 end
-function DoShell_20_Script (proj, teamId, pos, velocity, age, projectileId)
+function DoShell_7_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_7.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_8_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_8.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_9_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_9.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_10_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_10.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_11_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_11.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_12_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_12.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_13_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_13.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_14_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_14.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_15_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_15.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_16_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_16.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_17_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_17.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_18_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_18.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_19_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_19.lua", GetWeaponHardpointPosition(origWeaponId))
+end
+function DoShell_20_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_20.lua", GetWeaponHardpointPosition(origWeaponId))
     CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
     CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
 end

@@ -22,7 +22,7 @@ MetalFireCost = 120
 EnergyFireCost = 6500
 Recoil = 2000000
 -------------------------------------
-FireDelay = 2
+FireDelay = 1
 BarrelLength = 103.875
 BarrelRecoilLimit = -0.65
 BarrelRecoilSpeed = -7
