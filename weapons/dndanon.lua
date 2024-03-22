@@ -2,9 +2,9 @@ dofile("mods/dlc1_weapons/weapons/howitzer.lua")
 dofile("scripts/device_utility.lua")
 
 Sprites = {}
---FireDelay = 3
 Projectile = "shell1"
-FireEffect = "mods/dlc1_weapons/effects/fire_howitzer.lua"
+--FireEffect = "mods/dlc1_weapons/effects/fire_howitzer.lua"
+FireEffect = path .. "/effects/dice_roll.lua"
 ShellEffect = "mods/dlc1_weapons/effects/shell_eject_howitzer.lua"
 ConstructEffect = "effects/device_upgrade.lua"
 CompleteEffect = "effects/device_complete.lua"
@@ -21,6 +21,23 @@ ProjectileSplashDamageMaxRadius = 1000
 MetalFireCost = 120
 EnergyFireCost = 6500
 Recoil = 2000000
+-------------------------------------
+FireDelay = 2
+BarrelLength = 103.875
+BarrelRecoilLimit = -0.65
+BarrelRecoilSpeed = -7
+BarrelReturnForce = 0.6
+
+Scale = 1
+SelectionWidth = 70.0
+SelectionHeight = 40.0
+SelectionOffset = { 0.0, -48.5 }
+RecessionBox =
+{
+	Size = { 200, 25 },
+	Offset = { -230, -50 },
+}
+-------------------------------------
 
 --[[ FireStdDev = 0.005
 FireStdDevAuto = 0.005
@@ -74,10 +91,6 @@ Sprites =
     }
 }
 
-BarrelLength = 103.875
-BarrelRecoilLimit = -0.65
-BarrelRecoilSpeed = -7
-BarrelReturnForce = 0.4
 Root = 
 {
     Name = "Howitzer",
@@ -85,7 +98,7 @@ Root =
     UserData = 0,
     Angle = 0,
     Pivot = { 0, -0.46 },
-    -- PivotOffset = { 0, -0.05 },
+    PivotOffset = { 0, 0 },
     ChildrenBehind = 
     {
         {
