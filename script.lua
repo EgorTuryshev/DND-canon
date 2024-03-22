@@ -34,7 +34,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell16", "shell17", "shell18", "shell19", "shell20"}
     local selectedIndex = GetRandomIntegerLocal(1, #shells)
 
-    --selectedIndex = 6
+    selectedIndex = 5
     
     local proj = shells[selectedIndex]
 
@@ -42,6 +42,10 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
 
     if selectedIndex == 1 then
         DoShell_1_Script(origWeaponId)
+	elseif selectedIndex == 4 then
+        DoShell_4_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+	elseif selectedIndex == 5 then
+        DoShell_5_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     elseif selectedIndex == 6 then
         DoShell_6_Script(proj, teamId, pos, velocity, age, projectileId)
     elseif selectedIndex == 20 then
@@ -115,7 +119,7 @@ function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroy
         else
             teamId = 1
         end
-        CreateDeviation(-180, name, teamId, pos, velocity, age, nodeId)
+        CreateDeviation(name.."_nocol", -180, name, teamId, pos, velocity, age, nodeId)
     end
 end
 
@@ -131,17 +135,27 @@ function DoShell_3_Script (proj, teamId, pos, velocity, age, projectileId)
 
 end
 function DoShell_4_Script (proj, teamId, pos, velocity, age, projectileId)
-
+	Log("4Script,")
+	--CreateDeviation("EffectShellSmoke", -180, proj, teamId, pos, velocity, age, projectileId)
+	CreateDeviation("EffectShellFire", -180, proj, teamId, pos, velocity, age, projectileId)
 end
-function DoShell_5_Script (proj, teamId, pos, velocity, age, projectileId)
-
+function DoShell_5_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+	--Log("5Script,")
+	dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+	dlc2_CreateProjectile("EffectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+	dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+	dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+	Log(tostring(pos))
+	Log(tostring(pos.x))
+	Log(tostring(pos.y))
+	
 end
 function DoShell_6_Script (proj, teamId, pos, velocity, age, projectileId)
 
 end
 function DoShell_20_Script (proj, teamId, pos, velocity, age, projectileId)
-    CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
-    CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
+    CreateDeviation( 10, proj, teamId, pos, velocity, age, projectileId)
+    CreateDeviation( -10, proj, teamId, pos, velocity, age, projectileId)
 end
 
 --------------------------------------------------------------------------------------------------------------

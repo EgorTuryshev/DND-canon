@@ -66,3 +66,46 @@ for i, v in ipairs(Projectiles) do
        Projectiles[#Projectiles+1] = nocol
    end
 end    
+
+
+local EffectShellFire = DeepCopy(FindProjectile("shrapnel"))
+EffectShellFire.SaveName = "EffectShellFire"
+EffectShellFire.ProjectileDamage = 0
+EffectShellFire.Impact = 0
+EffectShellFire.DndProjectile = false
+EffectShellFire.ProjectileIncendiary = true
+EffectShellFire.IncendiaryRadius = 70
+EffectShellFire.IncendiaryRadiusHeated = 140
+EffectShellFire.AlwaysIncendiary = true
+Projectiles[#Projectiles+1] = EffectShellFire
+
+local EffectShellSmoke = DeepCopy(FindProjectile("smokebomb"))
+EffectShellSmoke.SaveName = "EffectShellSmoke"
+EffectShellSmoke.ProjectileDamage = 0
+EffectShellSmoke.DndProjectile = false
+EffectShellSmoke.MaxAge = 15
+Projectiles[#Projectiles+1] = EffectShellSmoke
+
+local EffectShellEMP = DeepCopy(FindProjectile("shrapnel"))
+EffectShellEMP.SaveName = "EffectShellEMP"
+EffectShellEMP.ProjectileDamage = 0
+EffectShellEMP.DndProjectile = false
+EffectShellEMP.EMPRadius = 150
+EffectShellEMP.EMPDuration = 10
+Projectiles[#Projectiles+1] = EffectShellEMP
+
+
+if moonshot then
+	EffectShellMagnet = DeepCopy(FindProjectile("magneticfield"))
+	EffectShellMagnet.SaveName = "EffectShellMagnet"
+    EffectShellMagnet.FieldRadius = 200.0
+    EffectShellMagnet.MagneticModifierFriendly = 0
+    EffectShellMagnet.MagneticModifierEnemy = 0.5
+    EffectShellMagnet.FieldIntersectionNearest = false
+    EffectShellMagnet.FieldStrengthMax = 500
+    EffectShellMagnet.FieldStrengthFalloffPower = 0.5
+    EffectShellMagnet.FieldType = 2
+	EffectShellMagnet.MaxAge = 4
+	EffectShellMagnet.Gravity = 0
+	Projectiles[#Projectiles+1] = EffectShellMagnet
+end
