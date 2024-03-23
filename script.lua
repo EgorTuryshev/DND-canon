@@ -32,9 +32,9 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell6", "shell7", "shell8", "shell9", "shell10",
                 "shell11", "shell12", "shell13", "shell14", "shell15",
                 "shell16", "shell17", "shell18", "shell19", "shell20"}
-    local selectedIndex = GetRandomIntegerLocal(1, #shells) --replays might not work correctly
+    local selectedIndex = GetRandomInteger(1, #shells, "dice roll")
 
-    selectedIndex = 5
+    --selectedIndex = 5
     
     local proj = shells[selectedIndex]
 
@@ -165,11 +165,8 @@ end
 function DoShell_3_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     SpawnEffect(path .. "/effects/roll_3.lua", GetWeaponHardpointPosition(origWeaponId))
 end
-function DoShell_4_Script (proj, teamId, pos, velocity, age, projectileId)
-	Log("4Script,")
-  SpawnEffect(path .. "/effects/roll_4.lua", GetWeaponHardpointPosition(origWeaponId))
-	--CreateDeviation("EffectShellSmoke", -180, proj, teamId, pos, velocity, age, projectileId)
-	CreateDeviation("EffectShellFire", -180, proj, teamId, pos, velocity, age, projectileId)
+function DoShell_4_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    SpawnEffect(path .. "/effects/roll_4.lua", GetWeaponHardpointPosition(origWeaponId))
 end
 function DoShell_5_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
   SpawnEffect(path .. "/effects/roll_5.lua", GetWeaponHardpointPosition(origWeaponId))

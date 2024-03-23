@@ -1,5 +1,5 @@
 -- how long the effect can last, even if component effects are still going
-LifeSpan = 1
+LifeSpan = 4
 
 -- list of (potentially animated) sprites. be careful of duplicate names.
 Sprites =
@@ -14,28 +14,18 @@ Sprites =
 				{
 					-- the last frame is blank to prevent looping
 					{ texture = path .. "/effects/media/anim_1.png" },
-					{ texture = path .. "/effects/media/anim_2.png" },
-					{ texture = path .. "/effects/media/anim_3.png" },
-                    { texture = path .. "/effects/media/anim_4.png" },
-					{ texture = path .. "/effects/media/anim_5.png" },
-					{ texture = path .. "/effects/media/anim_6.png" },
-                    { texture = path .. "/effects/media/anim_7.png" },
-					{ texture = path .. "/effects/media/anim_8.png" },
-					{ texture = path .. "/effects/media/anim_9.png" },
-                    { texture = path .. "/effects/media/anim_10.png" },
-					{ texture = path .. "/effects/media/anim_11.png" },
-					{ texture = path .. "/effects/media/anim_12.png" },
-                    { texture = path .. "/effects/media/anim_13.png" },
-					{ texture = path .. "/effects/media/anim_14.png" },
-					{ texture = path .. "/effects/media/anim_15.png" },
-                    { texture = path .. "/effects/media/anim_16.png" },
-					{ texture = path .. "/effects/media/anim_17.png" },
-					{ texture = path .. "/effects/media/anim_18.png" },
-                    { texture = path .. "/effects/media/anim_19.png" },
 					{ texture = path .. "/effects/media/anim_20.png" },
+					{ texture = path .. "/effects/media/anim_4.png" },
+                    { texture = path .. "/effects/media/anim_16.png" },
+					{ texture = path .. "/effects/media/anim_7.png" },
+					{ texture = path .. "/effects/media/anim_10.png" },
+                    { texture = path .. "/effects/media/anim_9.png" },
+					{ texture = path .. "/effects/media/anim_13.png" },
+					{ texture = path .. "/effects/media/anim_19.png" },
+                    { texture = path .. "/effects/media/anim_5.png" },
 					{ texture = path .. "/effects/media/anim_4.png", colour = { 1, 1, 1, 0 }, duration = 2 },
 
-					duration = 0.05,
+					duration = 0.1,
 					blendColour = true,
 					blendCoordinates = false,
 				},
@@ -67,5 +57,12 @@ Effects =
 		RandomAngularVelocityMagnitude = 0,
 		Colour1 = { 255, 255, 255, 255 },
 		Colour2 = { 255, 255, 255, 255 },
+	},
+	{
+		Type = "sound",
+		TimeToTrigger = 0.0,
+		LocalPosition = { x = 0, y = 0, z = 0 },
+		Sound = path .. "/effects/media/Dnd-shoot.wav",
+		Volume = 1,
 	},
 }
