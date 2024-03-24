@@ -1,3 +1,4 @@
+dofile("scripts/type.lua")
 local howitzer = FindProjectile("howitzer")
 
 if howitzer then
@@ -41,6 +42,35 @@ if howitzer then
     Projectiles[#Projectiles+1] = shell20
 end
 
+local unluckMarker = DeepCopy(FindProjectile("ol_marker_sweep"))
+if unluckMarker then
+	unluckMarker.SaveName = "unluckMarker"
+    unluckMarker.DndProjectile = true
+    unluckMarker.Projectile =
+	{
+		Root =
+		{
+			Name = "Root",
+			Angle = 0,
+			Sprite = path.. "/weapons/sprites/shell20.png",
+			PivotOffset = {0, 0},
+			Scale = 4.0,
+		}
+	}
+    unluckMarker.Effects =
+	{
+		Impact =
+		{
+			["default"] = path .. "/effects/marker_land.lua",
+		},
+		Deflect =
+		{
+			["default"] = "effects/bullet_bracing_hit.lua",
+		},
+	}
+	unluckMarker.dlc2_orbital = nil
+	Projectiles[#Projectiles+1] = unluckMarker
+end
 
 for i, v in ipairs(Projectiles) do
     if v.DndProjectile then
@@ -96,7 +126,7 @@ Projectiles[#Projectiles+1] = EffectShellEMP
 
 
 if moonshot then
-	EffectShellMagnet = DeepCopy(FindProjectile("magneticfield"))
+	local EffectShellMagnet = DeepCopy(FindProjectile("magneticfield"))
 	EffectShellMagnet.SaveName = "EffectShellMagnet"
     EffectShellMagnet.FieldRadius = 200.0
     EffectShellMagnet.MagneticModifierFriendly = 0
@@ -108,4 +138,27 @@ if moonshot then
 	EffectShellMagnet.MaxAge = 4
 	EffectShellMagnet.Gravity = 0
 	Projectiles[#Projectiles+1] = EffectShellMagnet
+end
+
+local unluckShell = DeepCopy(FindProjectile("howitzer"))
+if unluckShell then
+	unluckShell.SaveName = "unluckShell"
+	unluckShell.ProjectileDamage = 100
+	unluckShell.ProjectileSplashDamage = 90
+	unluckShell.ProjectileSplashDamageMaxRadius = 130
+	unluckShell.Gravity = unluckShell.Gravity * 1.35
+	unluckShell.AntiAirHitpoints = 11
+    unluckShell.DamageMultiplier = {}
+    unluckShell.CollidesWithLike = false
+    unluckShell.Projectile =
+	{
+		Root =
+		{
+			Name = "Root",
+			Angle = 0,
+			Scale = 4,
+			Sprite = path .. "/weapons/sprites/shell1.png",
+		}
+	}
+	Projectiles[#Projectiles+1] = unluckShell
 end

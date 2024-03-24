@@ -1,7 +1,5 @@
 dofile("scripts/forts.lua")
 
-local RPdebug = true
-
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     if weaponId ~= -1 and saveName == "dndanon" then
         ProtectedFunction(OnWeaponFiredpcall,teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
@@ -31,12 +29,13 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
     local shells = {"shell1", "shell2", "shell3", "shell4", "shell5", 
                 "shell6", "shell7", "shell8", "shell9", "shell10",
                 "shell11", "shell12", "shell13", "shell14", "shell15",
-                "shell16", "shell17", "shell18", "shell19", "shell20"}
+                "shell16", "shell17", "shell18", "shell19", "shell20", "unluckMarker"}
     local selectedIndex = GetRandomInteger(1, #shells, "dice roll")
 
-    selectedIndex = 17
+    selectedIndex = 21
     
     local proj = shells[selectedIndex]
+    Log(proj)
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
 
@@ -80,6 +79,8 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
         DoShell_19_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     elseif selectedIndex == 20 then
         DoShell_20_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    elseif selectedIndex == 21 then
+        Log("21")
     end
 
     if origWeaponId > 0 then
@@ -170,6 +171,58 @@ function DeleteBeforeDestroyMinigame(teamId)
     end
 end
 
+------------------------------------TEST CODE------------------------------------------------
+function CallUnluckStorm(markerPOS, team, clientId)
+	--get position to place weapon
+	local extents = GetWorldExtents()
+	local devicePOS = Vec3(0,-12000,0)
+	--if neither team 1 or team 2 then assign one closest to the projectile
+	if team%100 ~= 1 and team%100 ~= 2 then
+		if markerPOS["x"] > 0 then
+			team = 2
+		else
+			team = 1
+		end
+	end
+	--switch sides for teams.
+	if team%100 == 1 then
+		devicePOS = Vec3(extents["MinX"] + 200, extents["MinY"] - 2000, 0)
+	elseif team%100 == 2 then
+		devicePOS = Vec3(extents["MaxX"] - 200, extents["MinY"] - 2000, 0)
+	end
+	--place weapon and fire
+	EnableWeapon("unluckStorm", true, 1)
+	local deviceId = dlc2_CreateFloatingDevice(team, "unluckStorm", devicePOS, 0.0)
+	SetWeaponClientId(deviceId, clientId)
+	ScheduleCall(2.5, FireWeapon, deviceId, markerPOS, 0.0, FIREFLAG_NORMAL)
+	
+	EnableWeapon("unluckStorm", false, 1)
+	--continue to event OnWeaponFiredEnd to delete device
+end
+
+function OnLinkHit(nodeIdA, nodeIdB, objectId, objectTeamId, objectSaveName, damage, pos)
+	--summon orbital artillery strike
+	if objectSaveName == "unluckMarker" then
+		CallUnluckStorm(pos, objectTeamId, GetProjectileClientId(objectId))
+	end
+	
+end
+
+function OnDeviceHit(teamId, deviceId, saveName, newHealth, projectileNodeId, projectileTeamId, pos)
+	--summon orbital artillery strike
+	if GetNodeProjectileSaveName(projectileNodeId) == "unluckMarker" then
+		CallUnluckStorm(pos, projectileTeamId, GetProjectileClientId(projectileNodeId))
+    end
+end
+
+function OnWeaponFiredEnd(teamId, saveName, weaponId)
+	--remove artillery source weapon once done firing
+	if saveName == "unluckMarker" then
+		DestroyDeviceById(weaponId)
+	end
+end
+------------------------------------TEST CODE END------------------------------------------------
+
 --------------------------------------------------------------------------------------------------------------
 
 function DoShell_1_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
@@ -245,8 +298,6 @@ function DoShell_20_Script (origWeaponId, proj, teamId, pos, velocity, age, proj
 end
 
 --------------------------------------------------------------------------------------------------------------
-
-function LogDebug(s) if RPdebug then Log(s) end end
 
 function Load()
     ProtectedFunction(Loadpcall)

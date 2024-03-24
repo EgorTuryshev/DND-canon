@@ -17,3 +17,24 @@ if howitzer then
         )
     )
 end
+
+local unluckStorm = FindWeapon("minigun")
+if unluckStorm then
+	table.insert(Weapons,
+		InheritType(FindWeapon("minigun"),nil,
+			{	
+				SaveName = "unluckStorm",
+				FileName = path .. "/weapons/unluck_storm.lua",
+				MetalCost = 0,
+				EnergyCost = 0,
+				BuildTimeComplete = 0.0,
+				Prerequisite = nil,
+				Enabled = false,
+				dlc2_BuildAnywhere = true,
+				RequiresSpotterToFire = false,
+				AnimationScript = nil,
+				BuildOnGroundOnly = true,
+			}
+		)
+	)
+end
