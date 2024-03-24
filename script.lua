@@ -34,7 +34,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell16", "shell17", "shell18", "shell19", "shell20"}
     local selectedIndex = GetRandomInteger(1, #shells, "dice roll")
 
-    --selectedIndex = 5
+    selectedIndex = 17
     
     local proj = shells[selectedIndex]
 
@@ -139,6 +139,9 @@ function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeap
 end
 
 function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroyType)
+
+    local damagedTeamId = GetStructureTeam(structureIdHit)
+
     local name = GetNodeProjectileSaveName(nodeId)
     if name == "shell6" and destroyType == 2 then
         local velocity = NodeVelocity(nodeId)
@@ -150,6 +153,20 @@ function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroy
             teamId = 1
         end
         CreateDeviation(name.."_nocol", -180, name, teamId, pos, velocity, age, nodeId)
+    elseif name == "shell17" and destroyType == 5 and teamId ~= damagedTeamId then
+        DeleteBeforeDestroyMinigame(damagedTeamId)
+    end
+end
+
+function DeleteBeforeDestroyMinigame(teamId)
+    local devices = GetDeviceCountSide(teamId)
+    local selectedIndex = GetRandomInteger(0, devices, "destroyed device")
+    local DeviceToDestroy = GetDeviceIdSide(teamId, selectedIndex)
+    if DeviceCanBeDestroyedById(DeviceToDestroy) then
+        SpawnEffect(path .. "/effects/counter.lua", GetDeviceCentrePosition(DeviceToDestroy))
+        ScheduleCall(15, ApplyDamageToDevice, DeviceToDestroy, 10000)	
+    else
+        DeleteBeforeDestroyMinigame(teamId) -- there is actually a small chance of endless loop in case of empty fort
     end
 end
 
@@ -237,4 +254,5 @@ end
 
 function Loadpcall()
     if not data.AgeTriggers then data.AgeTriggers = {} end
+    -- need to do cleanup 
 end
