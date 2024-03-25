@@ -34,8 +34,8 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell11", "shell12", "shell13", "shell14", "shell15",
                 "shell16", "shell17", "shell18", "shell19", "shell20", "unluckMarker"}
     local selectedIndex = GetRandomInteger(1, #shells, "dice roll")
-
-    selectedIndex = 12
+	
+    selectedIndex = 21
     
     local proj = shells[selectedIndex]
     Log(proj)
@@ -114,23 +114,41 @@ function Vec3MultiplyScalar(vec, scalar)
     return {x = vec.x * scalar, y = vec.y * scalar, z = vec.z * scalar}
 end
 
+function VelocityByDeviationAngle(DeviationAngleDegree, velocity)
+	local rad = math.pi / 180
+	local sin_angle = math.sin(DeviationAngleDegree * rad)
+	local cos_angle = math.cos(DeviationAngleDegree * rad)
+	--Log(tostring(Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)))
+	return Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)
+end
+
 function KeepSinTrajectory(id, teamId, timesrepeated)
     if not NodeExists(id) then return end
     timesrepeated = timesrepeated + 1
     local velocity = NodeVelocity(id)
-    local deltaTime = 0.04 -- время между вызовами, соответствует 1/25 секунды
+    local deltaTime = 0.12 -- время между вызовами, соответствует 1/25 секунды
     local phaseShift = 0.02 -- фазовый сдвиг для синусоиды
-    local amplitude = -1000 -- амплитуда изменения скорости
-    local frequencyModifier = 8
-
-    local time = timesrepeated * deltaTime * frequencyModifier + phaseShift
-    local newVelocityX = velocity.x + amplitude * math.sin(time) * -1
-    local newVelocityY = velocity.y + amplitude * math.cos(time)
-
-    local newVelocity = Vec3(newVelocityX, newVelocityY)
-    Log(tostring(velocity))
+    local frequencyModifier = 5
+	local timeToMaxSin = 3
+	local amplitudeModifier = 16
+	local amplitude
+    local time = timesrepeated * deltaTime * frequencyModifier-- + phaseShift
+	
+	
+	if (timesrepeated*deltaTime<timeToMaxSin) then
+		amplitude = timesrepeated*deltaTime*amplitudeModifier
+	else
+		amplitude = timeToMaxSin*amplitudeModifier
+	end
+	
+	local deviationAngle = math.sin(time)*amplitude
+	Log(tostring(deviationAngle))
+    --local newVelocityX = velocity.x + amplitude * math.sin(time) * -1
+	
+    local newVelocity = VelocityByDeviationAngle(deviationAngle,velocity)
+    --Log(tostring(velocity))
     SetProjectileVelocity(id, teamId, newVelocity)
-    ScheduleCall(0, KeepSinTrajectory, id, teamId, timesrepeated)
+    ScheduleCall(0.12, KeepSinTrajectory, id, teamId, timesrepeated)
 end
 
 function ProtectedFunction(func,...)
@@ -145,6 +163,7 @@ function RGBAtoHex(r, g, b, a, UTF16)
     local hex = string.format("%02X%02X%02X%02X", r, g, b, a)
     if UTF16 == true then return L"[HL=" .. towstring(hex) .. L"]" else return "[HL=" .. hex .. "]" end
 end
+
 
 function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeaponId)
 	local rad = math.pi / 180
