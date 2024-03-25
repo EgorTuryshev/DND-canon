@@ -1,6 +1,9 @@
 dofile("scripts/forts.lua")
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
+    if(GetNodeProjectileSaveName(projectileNodeId) == "shell12") then
+        KeepSinTrajectory(projectileNodeId, teamId, 0)
+    end
     if weaponId ~= -1 and saveName == "dndanon" then
         ProtectedFunction(OnWeaponFiredpcall,teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     end
@@ -32,7 +35,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell16", "shell17", "shell18", "shell19", "shell20", "unluckMarker"}
     local selectedIndex = GetRandomInteger(1, #shells, "dice roll")
 
-    selectedIndex = 21
+    selectedIndex = 12
     
     local proj = shells[selectedIndex]
     Log(proj)
@@ -105,6 +108,29 @@ function NoColProjectileEnd(id,timesrepeated)
             data.AgeTriggers[id] = data.AgeTriggers[id]-0.04*timesrepeated+0.02
         end
     else SetNodeProjectileAgeTrigger(id,0.04*timesrepeated) end
+end
+
+function Vec3MultiplyScalar(vec, scalar)
+    return {x = vec.x * scalar, y = vec.y * scalar, z = vec.z * scalar}
+end
+
+function KeepSinTrajectory(id, teamId, timesrepeated)
+    if not NodeExists(id) then return end
+    timesrepeated = timesrepeated + 1
+    local velocity = NodeVelocity(id)
+    local deltaTime = 0.04 -- время между вызовами, соответствует 1/25 секунды
+    local phaseShift = 0.02 -- фазовый сдвиг для синусоиды
+    local amplitude = -1000 -- амплитуда изменения скорости
+    local frequencyModifier = 8
+
+    local time = timesrepeated * deltaTime * frequencyModifier + phaseShift
+    local newVelocityX = velocity.x + amplitude * math.sin(time) * -1
+    local newVelocityY = velocity.y + amplitude * math.cos(time)
+
+    local newVelocity = Vec3(newVelocityX, newVelocityY)
+    Log(tostring(velocity))
+    SetProjectileVelocity(id, teamId, newVelocity)
+    ScheduleCall(0, KeepSinTrajectory, id, teamId, timesrepeated)
 end
 
 function ProtectedFunction(func,...)
@@ -192,11 +218,13 @@ function CallUnluckStorm(markerPOS, team, clientId)
 	end
 	--place weapon and fire
 	EnableWeapon("unluckStorm", true, 1)
+    EnableWeapon("unluckStorm", true, 2)
 	local deviceId = dlc2_CreateFloatingDevice(team, "unluckStorm", devicePOS, 0.0)
 	SetWeaponClientId(deviceId, clientId)
 	ScheduleCall(2.5, FireWeapon, deviceId, markerPOS, 0.0, FIREFLAG_NORMAL)
 	
 	EnableWeapon("unluckStorm", false, 1)
+    EnableWeapon("unluckStorm", false, 2)
 	--continue to event OnWeaponFiredEnd to delete device
 end
 
@@ -205,7 +233,6 @@ function OnLinkHit(nodeIdA, nodeIdB, objectId, objectTeamId, objectSaveName, dam
 	if objectSaveName == "unluckMarker" then
 		CallUnluckStorm(pos, objectTeamId, GetProjectileClientId(objectId))
 	end
-	
 end
 
 function OnDeviceHit(teamId, deviceId, saveName, newHealth, projectileNodeId, projectileTeamId, pos)
@@ -222,6 +249,12 @@ function OnWeaponFiredEnd(teamId, saveName, weaponId)
 	end
 end
 ------------------------------------TEST CODE END------------------------------------------------
+function SetProjectileVelocity(nodeId, teamId, velocity)
+    local projCurrentVelocity = NodeVelocity(nodeId)
+    local projMass = GetProjectileParamInt(GetNodeProjectileSaveName(nodeId), teamId, "ProjectileMass", 1)
+    dlc2_ApplyForce(nodeId, Vec3MultiplyScalar(velocity - projCurrentVelocity, projMass / data.updateDelta))
+end
+
 
 --------------------------------------------------------------------------------------------------------------
 
@@ -305,5 +338,7 @@ end
 
 function Loadpcall()
     if not data.AgeTriggers then data.AgeTriggers = {} end
+    EnableWeapon("unluckStorm", false, 1)
+	EnableWeapon("unluckStorm", false, 2)
     -- need to do cleanup 
 end
