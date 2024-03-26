@@ -12,7 +12,7 @@ Sprites =
 				{
 					{ texture = path .. "/effects/media/anim_3.png"},
 
-					duration = 1,
+					duration = 1.5,
 					blendColour = false,
 					blendCoordinates = false,
 				},
@@ -34,8 +34,8 @@ Effects =
 		Drag = 0.0,
 		Sprite = "roll_3",
 		Additive = false,
-		TimeToLive = 1,
-		InitialSize = 4,
+		TimeToLive = 1.5,
+		InitialSize = 2,
 		ExpansionRate = 0,
 		Angle = -22.5,
 		AngleMaxDeviation = 0,

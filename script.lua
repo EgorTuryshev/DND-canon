@@ -35,7 +35,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell16", "shell17", "shell18", "shell19", "shell20", "unluckMarker"}
     local selectedIndex = GetRandomInteger(1, #shells, "dice roll")
 	
-    selectedIndex = 21
+     --selectedIndex = 3
     
     local proj = shells[selectedIndex]
     Log(proj)
