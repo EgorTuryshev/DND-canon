@@ -1,4 +1,5 @@
 dofile("scripts/forts.lua")
+dofile(path .. "/globals.lua")
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     if(GetNodeProjectileSaveName(projectileNodeId) == "shell12") then
@@ -35,7 +36,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell16", "shell17", "shell18", "shell19", "shell20", "unluckMarker"}
     local selectedIndex = GetRandomInteger(1, #shells, "dice roll")	
 
-    selectedIndex = 20
+    selectedIndex = 12
 
     local proj = shells[selectedIndex]
     Log(proj)
@@ -126,29 +127,21 @@ function KeepSinTrajectory(id, teamId, timesrepeated)
     if not NodeExists(id) then return end
     timesrepeated = timesrepeated + 1
     local velocity = NodeVelocity(id)
-    local deltaTime = 0.12 -- время между вызовами, соответствует 1/25 секунды
-    local phaseShift = 0.02 -- фазовый сдвиг для синусоиды
-    local frequencyModifier = 3
-	local timeToMaxSin = 3
-	local amplitudeModifier = 3
 	local amplitude
-    local time = timesrepeated * deltaTime * frequencyModifier-- + phaseShift
+    local time = timesrepeated * DeltaTimeBetweenCalls * SinFrequencyModifier-- + SinPhaseShift
 	
-	
-	if (timesrepeated*deltaTime<timeToMaxSin) then
-		amplitude = timesrepeated*deltaTime*amplitudeModifier
+	if timesrepeated * DeltaTimeBetweenCalls < TimeToMaxSin then
+		amplitude = timesrepeated * DeltaTimeBetweenCalls * SinAmplitudeModifier
 	else
-		amplitude = timeToMaxSin*amplitudeModifier
+		amplitude = TimeToMaxSin * SinAmplitudeModifier
 	end
 	
-	local deviationAngle = math.sin(time)*amplitude
-	Log(tostring(deviationAngle))
-    --local newVelocityX = velocity.x + amplitude * math.sin(time) * -1
+	local deviationAngle = math.sin(time) * amplitude
+	--Log(tostring(deviationAngle))
 	
     local newVelocity = VelocityByDeviationAngle(deviationAngle,velocity)
-    --Log(tostring(velocity))
     SetProjectileVelocity(id, teamId, newVelocity)
-    ScheduleCall(0.12, KeepSinTrajectory, id, teamId, timesrepeated)
+    ScheduleCall(DeltaTimeBetweenCalls, KeepSinTrajectory, id, teamId, timesrepeated)
 end
 
 function ProtectedFunction(func,...)
@@ -190,7 +183,7 @@ function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroy
         local velocity = NodeVelocity(nodeId)
         local pos = NodePosition(nodeId)
         local age = GetNodeProjectileTimeRemaining(nodeId)
-        if teamId == 1 then
+        if teamId%100 == 1 then
             teamId = 2
         else
             teamId = 1
@@ -271,24 +264,31 @@ function SetProjectileVelocity(nodeId, teamId, velocity)
     dlc2_ApplyForce(nodeId, Vec3MultiplyScalar(velocity - projCurrentVelocity, projMass / data.updateDelta))
 end
 
-
+function GetRollEffectPos(origWeaponId)
+    local pos = GetWeaponHardpointPosition(origWeaponId)
+    if GetDeviceTeamIdActual(origWeaponId)%100 == 1 then
+        return Vec3(pos.x + RollEffectOffsetForLeftTeam_X, pos.y + RollEffectOffsetForLeftTeam_Y)
+    else
+        return Vec3(pos.x + RollEffectOffsetForRightTeam_X, pos.y + RollEffectOffsetForRightTeam_Y)
+    end
+end
 --------------------------------------------------------------------------------------------------------------
 
 function DoShell_1_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_1.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_1.lua", GetRollEffectPos(origWeaponId))
     ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
 end
 function DoShell_2_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_2.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_2.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_3_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_3.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_3.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_4_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_4.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_4.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_5_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-  SpawnEffect(path .. "/effects/roll_5.lua", GetWeaponHardpointPosition(origWeaponId))
+  SpawnEffect(path .. "/effects/roll_5.lua", GetRollEffectPos(origWeaponId))
 	--Log("5Script,")
 	dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
 	dlc2_CreateProjectile("EffectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
@@ -299,49 +299,49 @@ function DoShell_5_Script (origWeaponId, proj, teamId, pos, velocity, age, proje
 	Log(tostring(pos.y))
 end
 function DoShell_6_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_6.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_6.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_7_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_7.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_7.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_8_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_8.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_8.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_9_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_9.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_9.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_10_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_10.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_10.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_11_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_11.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_11.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_12_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_12.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_12.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_13_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_13.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_13.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_14_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_14.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_14.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_15_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_15.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_15.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_16_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_16.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_16.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_17_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_17.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_17.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_18_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_18.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_18.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_19_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_19.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_19.lua", GetRollEffectPos(origWeaponId))
 end
 function DoShell_20_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffect(path .. "/effects/roll_20.lua", GetWeaponHardpointPosition(origWeaponId))
+    SpawnEffect(path .. "/effects/roll_20.lua", GetRollEffectPos(origWeaponId))
     CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
     CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
 end
