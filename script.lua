@@ -35,7 +35,11 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
                 "shell16", "shell17", "shell18", "shell19", "shell20", "unluckMarker"}
     local selectedIndex = GetRandomInteger(1, #shells, "dice roll")
 	
+<<<<<<< HEAD
      --selectedIndex = 3
+=======
+    selectedIndex = 20
+>>>>>>> 14aec35e8019ab686a6b82430b49437d8586789b
     
     local proj = shells[selectedIndex]
     Log(proj)
@@ -114,10 +118,10 @@ function Vec3MultiplyScalar(vec, scalar)
     return {x = vec.x * scalar, y = vec.y * scalar, z = vec.z * scalar}
 end
 
-function VelocityByDeviationAngle(DeviationAngleDegree, velocity)
+function VelocityByDeviationAngle(deviationAngleDegree, velocity)
 	local rad = math.pi / 180
-	local sin_angle = math.sin(DeviationAngleDegree * rad)
-	local cos_angle = math.cos(DeviationAngleDegree * rad)
+	local sin_angle = math.sin(deviationAngleDegree * rad)
+	local cos_angle = math.cos(deviationAngleDegree * rad)
 	--Log(tostring(Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)))
 	return Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)
 end
@@ -128,9 +132,9 @@ function KeepSinTrajectory(id, teamId, timesrepeated)
     local velocity = NodeVelocity(id)
     local deltaTime = 0.12 -- время между вызовами, соответствует 1/25 секунды
     local phaseShift = 0.02 -- фазовый сдвиг для синусоиды
-    local frequencyModifier = 5
+    local frequencyModifier = 3
 	local timeToMaxSin = 3
-	local amplitudeModifier = 16
+	local amplitudeModifier = 3
 	local amplitude
     local time = timesrepeated * deltaTime * frequencyModifier-- + phaseShift
 	
@@ -166,11 +170,8 @@ end
 
 
 function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeaponId)
-	local rad = math.pi / 180
-	local sin_angle = math.sin(degreeAngle * rad)
-	local cos_angle = math.cos(degreeAngle * rad)
-	
-	local deviation = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle), age)	
+
+	local deviation = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, VelocityByDeviationAngle(degreeAngle, velocity), age)	
 
     local agetrigger = GetNodeProjectileAgeTrigger(origWeaponId)
 
