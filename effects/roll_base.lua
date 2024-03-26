@@ -1,4 +1,4 @@
---[[LifeSpan = 1
+--[[LifeSpan = 1.5
 
 Sprites =
 {
@@ -28,7 +28,7 @@ Effects =
 		Type = "sprite",
 		PlayForEnemy = true,
 		TimeToTrigger = 0,
-		LocalPosition = { x = -120, y = 40, z = 0 },
+		LocalPosition = { x = 0, y = 0, z = 0 },
 		LocalVelocity = { x = 0, y = 30, z = 0 },
 		Acceleration = { x = 0, y = 0, z = 0 },
 		Drag = 0.0,
