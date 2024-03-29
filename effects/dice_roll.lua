@@ -37,6 +37,17 @@ Sprites =
 					{ texture = path .. "/effects/media/dice_22.png" },
 					{ texture = path .. "/effects/media/dice_23.png" },
 					{ texture = path .. "/effects/media/dice_24.png" },
+					{ texture = path .. "/effects/media/dice_25.png" },
+					{ texture = path .. "/effects/media/dice_26.png" },
+					{ texture = path .. "/effects/media/dice_27.png" },
+					{ texture = path .. "/effects/media/dice_28.png" },
+					{ texture = path .. "/effects/media/dice_29.png" },
+					{ texture = path .. "/effects/media/dice_30.png" },
+					{ texture = path .. "/effects/media/dice_31.png" },
+					{ texture = path .. "/effects/media/dice_32.png" },
+					{ texture = path .. "/effects/media/dice_33.png" },
+					{ texture = path .. "/effects/media/dice_34.png" },
+					{ texture = path .. "/effects/media/dice_35.png" },
 
 					{ texture = path .. "/effects/media/dice_1.png", colour = { 1, 1, 1, 0 }, duration = 2 },
 
@@ -63,8 +74,8 @@ Effects =
 		Drag = 0.0,
 		Sprite = "dice_roll", -- defined above
 		Additive = false,
-		TimeToLive = 1,
-		InitialSize = 2,
+		TimeToLive = 1.5,
+		InitialSize = 1,
 		ExpansionRate = 0,
 		Angle = -90,
 		AngleMaxDeviation = 0,
