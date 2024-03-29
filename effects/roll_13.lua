@@ -10,7 +10,7 @@ Sprites =
 			{
 				Frames =
 				{
-					{ texture = path .. "/effects/media/anim_13.png"},
+					{ texture = path .. "/effects/media/roll_13.png"},
 
 					duration = 1.5,
 					blendColour = false,
