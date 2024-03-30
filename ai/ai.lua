@@ -1,4 +1,3 @@
---for test purposes
 ShootableProjectile["shell1"] = true
 ShootableProjectile["shell2"] = true
 ShootableProjectile["shell3"] = true
@@ -19,4 +18,6 @@ ShootableProjectile["shell17"] = true
 ShootableProjectile["shell18"] = true
 ShootableProjectile["shell19"] = true
 ShootableProjectile["shell20"] = true
+ShootableProjectile["unluckMarker"] = true
+ShootableProjectile["fireball"] = true
 

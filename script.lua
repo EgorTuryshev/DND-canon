@@ -1,6 +1,64 @@
 dofile("scripts/forts.lua")
 dofile(path .. "/globals.lua")
 
+Shells = {"shell1", "shell2", "shell3", "shell4", "shell5", 
+          "shell6", "shell7", "shell8", "shell9", "shell10",
+          "shell11", "shell12", "shell13", "shell14", "shell15",
+          "shell16", "shell17", "shell18", "shell19", "shell20", 
+          "unluckMarker", "fireball"}
+
+ShellScripts = {
+    DoShell_1_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
+    end,
+    DoShell_2_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_4_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("EffectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        Log(tostring(pos))
+        Log(tostring(pos.x))
+        Log(tostring(pos.y))
+    end,
+    DoShell_6_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_7_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_8_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_9_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_10_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_11_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_12_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_13_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_14_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_15_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_16_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_17_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_18_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_19_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_20_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
+        CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
+    end}
+
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     if(GetNodeProjectileSaveName(projectileNodeId) == "shell12") then
         KeepSinTrajectory(projectileNodeId, teamId, 0)
@@ -30,61 +88,20 @@ function OnWeaponFiredpcall(teamId, saveName, weaponId, projectileNodeId, projec
 end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
-    local shells = {"shell1", "shell2", "shell3", "shell4", "shell5", 
-                "shell6", "shell7", "shell8", "shell9", "shell10",
-                "shell11", "shell12", "shell13", "shell14", "shell15",
-                "shell16", "shell17", "shell18", "shell19", "shell20", "unluckMarker"}
-    local selectedIndex = GetRandomInteger(1, #shells, "dice roll")	
+    local selectedIndex = GetRandomInteger(1, #Shells, "dice roll")	
 
-    --selectedIndex = 12
+    selectedIndex = 17
 
-    local proj = shells[selectedIndex]
-    Log(proj)
+    local proj = Shells[selectedIndex]
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
 
-    if selectedIndex == 1 then
-        DoShell_1_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 2 then
-        DoShell_2_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 3 then
-        DoShell_3_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 4 then
-        DoShell_4_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 5 then
-        DoShell_5_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 6 then
-        DoShell_6_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 7 then
-        DoShell_7_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 8 then
-        DoShell_8_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 9 then
-        DoShell_9_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 10 then
-        DoShell_10_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 11 then
-        DoShell_11_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 12 then
-        DoShell_12_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 13 then
-        DoShell_13_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 14 then
-        DoShell_14_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 15 then
-        DoShell_15_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 16 then
-        DoShell_16_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 17 then
-        DoShell_17_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 18 then
-        DoShell_18_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 19 then
-        DoShell_19_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 20 then
-        DoShell_20_Script(origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    elseif selectedIndex == 21 then
-        Log("21")
+    local effect = selectedIndex > 20 and 20 or selectedIndex
+    SpawnEffect(path .. "/effects/roll_" .. effect .. ".lua", GetRollEffectPos(origWeaponId))
+
+    local functionName = "DoShell_" .. selectedIndex .. "_Script"
+    if ShellScripts[functionName] then
+        ShellScripts[functionName](origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end
 
     if origWeaponId > 0 then
@@ -111,6 +128,53 @@ function NoColProjectileEnd(id,timesrepeated)
     else SetNodeProjectileAgeTrigger(id,0.04*timesrepeated) end
 end
 
+function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroyType)
+    local damagedTeamId = GetStructureTeam(structureIdHit)
+
+    local name = GetNodeProjectileSaveName(nodeId)
+    if name == "shell6" and destroyType == 2 then
+        local velocity = NodeVelocity(nodeId)
+        local pos = NodePosition(nodeId)
+        local age = GetNodeProjectileTimeRemaining(nodeId)
+        if teamId%100 == 1 then
+            teamId = 2
+        else
+            teamId = 1
+        end
+        CreateDeviation(-180, name, teamId, pos, velocity, age, nodeId)
+    elseif name == "shell17" and destroyType == 5 and teamId ~= damagedTeamId then
+        DeleteBeforeDestroyMinigame(damagedTeamId)
+    end
+end
+
+function OnLinkHit(nodeIdA, nodeIdB, objectId, objectTeamId, objectSaveName, damage, pos)
+	--summon orbital artillery strike
+	if objectSaveName == "unluckMarker" then
+		CallUnluckStorm(pos, objectTeamId, GetProjectileClientId(objectId))
+	end
+end
+
+function OnDeviceHit(teamId, deviceId, saveName, newHealth, projectileNodeId, projectileTeamId, pos)
+	--summon orbital artillery strike
+	if GetNodeProjectileSaveName(projectileNodeId) == "unluckMarker" then
+		CallUnluckStorm(pos, projectileTeamId, GetProjectileClientId(projectileNodeId))
+    end
+end
+
+function OnWeaponFiredEnd(teamId, saveName, weaponId)
+	--remove artillery source weapon once done firing
+	if saveName == "unluckMarker" then
+		DestroyDeviceById(weaponId)
+	end
+end
+
+function Load()
+    if not data.AgeTriggers then data.AgeTriggers = {} end
+    EnableWeapon("unluckStorm", false, 1)
+	EnableWeapon("unluckStorm", false, 2)
+    -- need to do cleanup 
+end
+---------------------------------------------------------------------------------------------------------
 function Vec3MultiplyScalar(vec, scalar)
     return {x = vec.x * scalar, y = vec.y * scalar, z = vec.z * scalar}
 end
@@ -119,8 +183,21 @@ function VelocityByDeviationAngle(deviationAngleDegree, velocity)
 	local rad = math.pi / 180
 	local sin_angle = math.sin(deviationAngleDegree * rad)
 	local cos_angle = math.cos(deviationAngleDegree * rad)
-	--Log(tostring(Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)))
+
 	return Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)
+end
+
+function SetProjectileVelocity(nodeId, teamId, velocity)
+    local projCurrentVelocity = NodeVelocity(nodeId)
+    local projMass = GetProjectileParamInt(GetNodeProjectileSaveName(nodeId), teamId, "ProjectileMass", 1)
+    dlc2_ApplyForce(nodeId, Vec3MultiplyScalar(velocity - projCurrentVelocity, projMass / data.updateDelta))
+end
+
+function GetRollEffectPos(origWeaponId)
+    local pos = GetWeaponHardpointPosition(origWeaponId)
+    local angle = GetFireAngle(origWeaponId)
+
+    return Vec3(pos.x + RollEffectAngularDistance * math.sin(angle), pos.y + RollEffectAngularDistance * math.cos(angle))
 end
 
 function KeepSinTrajectory(id, teamId, timesrepeated)
@@ -137,7 +214,6 @@ function KeepSinTrajectory(id, teamId, timesrepeated)
 	end
 	
 	local deviationAngle = math.sin(time) * amplitude
-	--Log(tostring(deviationAngle))
 	
     local newVelocity = VelocityByDeviationAngle(deviationAngle,velocity)
     SetProjectileVelocity(id, teamId, newVelocity)
@@ -157,9 +233,7 @@ function RGBAtoHex(r, g, b, a, UTF16)
     if UTF16 == true then return L"[HL=" .. towstring(hex) .. L"]" else return "[HL=" .. hex .. "]" end
 end
 
-
 function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeaponId)
-
 	local deviation = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, VelocityByDeviationAngle(degreeAngle, velocity), age)	
 
     local agetrigger = GetNodeProjectileAgeTrigger(origWeaponId)
@@ -171,26 +245,6 @@ function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeap
     end
     if agetrigger and agetrigger > 0 then
         data.AgeTriggers[deviation] = agetrigger
-    end
-end
-
-function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroyType)
-
-    local damagedTeamId = GetStructureTeam(structureIdHit)
-
-    local name = GetNodeProjectileSaveName(nodeId)
-    if name == "shell6" and destroyType == 2 then
-        local velocity = NodeVelocity(nodeId)
-        local pos = NodePosition(nodeId)
-        local age = GetNodeProjectileTimeRemaining(nodeId)
-        if teamId%100 == 1 then
-            teamId = 2
-        else
-            teamId = 1
-        end
-        CreateDeviation(name.."_nocol", -180, name, teamId, pos, velocity, age, nodeId)
-    elseif name == "shell17" and destroyType == 5 and teamId ~= damagedTeamId then
-        DeleteBeforeDestroyMinigame(damagedTeamId)
     end
 end
 
@@ -206,7 +260,6 @@ function DeleteBeforeDestroyMinigame(teamId)
     end
 end
 
-------------------------------------TEST CODE------------------------------------------------
 function CallUnluckStorm(markerPOS, team, clientId)
 	--get position to place weapon
 	local extents = GetWorldExtents()
@@ -235,135 +288,4 @@ function CallUnluckStorm(markerPOS, team, clientId)
 	EnableWeapon("unluckStorm", false, 1)
     EnableWeapon("unluckStorm", false, 2)
 	--continue to event OnWeaponFiredEnd to delete device
-end
-
-function OnLinkHit(nodeIdA, nodeIdB, objectId, objectTeamId, objectSaveName, damage, pos)
-	--summon orbital artillery strike
-	if objectSaveName == "unluckMarker" then
-		CallUnluckStorm(pos, objectTeamId, GetProjectileClientId(objectId))
-	end
-end
-
-function OnDeviceHit(teamId, deviceId, saveName, newHealth, projectileNodeId, projectileTeamId, pos)
-	--summon orbital artillery strike
-	if GetNodeProjectileSaveName(projectileNodeId) == "unluckMarker" then
-		CallUnluckStorm(pos, projectileTeamId, GetProjectileClientId(projectileNodeId))
-    end
-end
-
-function OnWeaponFiredEnd(teamId, saveName, weaponId)
-	--remove artillery source weapon once done firing
-	if saveName == "unluckMarker" then
-		DestroyDeviceById(weaponId)
-	end
-end
-------------------------------------TEST CODE END------------------------------------------------
-function SetProjectileVelocity(nodeId, teamId, velocity)
-    local projCurrentVelocity = NodeVelocity(nodeId)
-    local projMass = GetProjectileParamInt(GetNodeProjectileSaveName(nodeId), teamId, "ProjectileMass", 1)
-    dlc2_ApplyForce(nodeId, Vec3MultiplyScalar(velocity - projCurrentVelocity, projMass / data.updateDelta))
-end
-
-function GetRollEffectPos(origWeaponId)
-    local pos = GetWeaponHardpointPosition(origWeaponId)
-    if GetDeviceTeamIdActual(origWeaponId)%100 == 1 then
-        return Vec3(pos.x + RollEffectOffsetForLeftTeam_X, pos.y + RollEffectOffsetForLeftTeam_Y)
-    else
-        return Vec3(pos.x + RollEffectOffsetForRightTeam_X, pos.y + RollEffectOffsetForRightTeam_Y)
-    end
-end
-
--- basepath should not end with ".lua"
-function SpawnEffectTeamBased(basepath, pos, teamId) 
-    if teamId%100 == 1 then
-        SpawnEffect(basepath .. "_left.lua", pos)
-    else
-        SpawnEffect(basepath .. "_right.lua", pos)
-    end
-end
---------------------------------------------------------------------------------------------------------------
-
-function DoShell_1_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_1", GetRollEffectPos(origWeaponId), teamId)
-    ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
-end
-function DoShell_2_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_2", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_3_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_3", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_4_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_4", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_5_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_5", GetRollEffectPos(origWeaponId), teamId)
-	--Log("5Script,")
-	dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-	dlc2_CreateProjectile("EffectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-	dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-	dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-	Log(tostring(pos))
-	Log(tostring(pos.x))
-	Log(tostring(pos.y))
-end
-function DoShell_6_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_6", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_7_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_7", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_8_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_8", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_9_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_9", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_10_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_10", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_11_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_11", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_12_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_12", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_13_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_13", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_14_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_14", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_15_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_15", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_16_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_16", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_17_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_17", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_18_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_18", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_19_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_19", GetRollEffectPos(origWeaponId), teamId)
-end
-function DoShell_20_Script (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    SpawnEffectTeamBased(path .. "/effects/roll_20", GetRollEffectPos(origWeaponId), teamId)
-    CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
-    CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
-end
-
---------------------------------------------------------------------------------------------------------------
-
-function Load()
-    ProtectedFunction(Loadpcall)
-end
-
-function Loadpcall()
-    if not data.AgeTriggers then data.AgeTriggers = {} end
-    EnableWeapon("unluckStorm", false, 1)
-	EnableWeapon("unluckStorm", false, 2)
-    -- need to do cleanup 
 end

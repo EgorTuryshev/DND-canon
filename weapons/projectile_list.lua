@@ -40,6 +40,21 @@ if howitzer then
     shell20.DndProjectile = true
     shell20.CollidesWithLike = false
     Projectiles[#Projectiles+1] = shell20
+
+    local fireball = DeepCopy(howitzer)
+    fireball.SaveName = "fireball"
+    fireball.ProjectileDamage = 750
+    fireball.AntiAirHitpoints = 110
+    fireball.Impact = 500000
+    fireball.ProjectileSprite = path.. "/weapons/sprites/shell20.png"
+    fireball.ProjectileThickness = 10.0
+    fireball.ProjectileShootDownRadius = 60
+    fireball.ProjectileIncendiary = true
+    fireball.IncendiaryRadius = 700
+    fireball.AlwaysIncendiary = true
+    fireball.DndProjectile = true
+    fireball.CollidesWithLike = false
+    Projectiles[#Projectiles+1] = fireball
 end
 
 local unluckMarker = DeepCopy(FindProjectile("ol_marker_sweep"))
