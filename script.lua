@@ -12,19 +12,23 @@ ShellScripts = {
         ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
     end,
     DoShell_2_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_4_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
         dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
         dlc2_CreateProjectile("EffectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
         dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
         dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        Log(tostring(pos))
-        Log(tostring(pos.x))
-        Log(tostring(pos.y))
+    end,
+    DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+    end,
+    DoShell_4_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+    end,
+    DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+
     end,
     DoShell_6_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end,
@@ -60,7 +64,7 @@ ShellScripts = {
     end}
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
-    if(GetNodeProjectileSaveName(projectileNodeId) == "shell12") then
+    if(IsShellNumberBelowOrEqual(GetNodeProjectileSaveName(projectileNodeId), 9)) then
         KeepSinTrajectory(projectileNodeId, teamId, 0)
     end
     if weaponId ~= -1 and saveName == "dndanon" then
@@ -90,7 +94,7 @@ end
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local selectedIndex = GetRandomInteger(1, #Shells, "dice roll")	
 
-    selectedIndex = 18
+    --selectedIndex = 19
 
     local proj = Shells[selectedIndex]
 
@@ -130,11 +134,22 @@ end
 
 function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroyType)
     local damagedTeamId = GetStructureTeam(structureIdHit)
-
+    local velocity = NodeVelocity(nodeId)
+    local pos = NodePosition(nodeId)
     local name = GetNodeProjectileSaveName(nodeId)
-    if name == "shell6" and destroyType == 2 then
-        local velocity = NodeVelocity(nodeId)
-        local pos = NodePosition(nodeId)
+    if IsShellNumberGreater(name,13) then
+        Log(tostring(teamId))
+        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, pos, Vec3(0,0), 0)
+    end
+
+    if IsShellNumberGreater(name,17) then
+        dlc2_CreateProjectile("EffectShellMagnet", "", teamId,pos, Vec3(0,0), 0)
+    end
+
+
+
+    if (IsShellNumberBelowOrEqual(name,7)) and destroyType == 2 then
+        
         local age = GetNodeProjectileTimeRemaining(nodeId)
         if teamId%100 == 1 then
             teamId = 2
@@ -185,6 +200,28 @@ function VelocityByDeviationAngle(deviationAngleDegree, velocity)
 	local cos_angle = math.cos(deviationAngleDegree * rad)
 
 	return Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)
+end
+
+function IsShellNumberBelowOrEqual(name, number)
+
+    for i = 1,number do
+        if name == "shell" .. i then
+            return true
+        end
+    end
+    return false
+
+end
+
+function IsShellNumberGreater(name, number)
+    number = 20-number
+    for i = 1,number do
+        if name == "shell" .. 20-i then
+            return true
+        end
+    end
+    return false
+
 end
 
 function SetProjectileVelocity(nodeId, teamId, velocity)
