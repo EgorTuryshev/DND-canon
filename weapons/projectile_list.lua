@@ -93,7 +93,7 @@ if howitzer then
     fireball.ProjectileDamage = 750
     fireball.AntiAirHitpoints = 110
     fireball.Impact = 500000
-    fireball.ProjectileSprite = path.. "/weapons/sprites/shell20.png"
+    fireball.ProjectileSprite = path.. "/weapons/sprites/fireball.png"
     fireball.ProjectileThickness = 10.0
     fireball.ProjectileShootDownRadius = 60
     fireball.ProjectileIncendiary = true
@@ -101,6 +101,7 @@ if howitzer then
     fireball.AlwaysIncendiary = true
     fireball.DndProjectile = true
     fireball.CollidesWithLike = false
+	fireball.TrailEffect = path.. "/effects/dice_trail.lua"
     Projectiles[#Projectiles+1] = fireball
 end
 

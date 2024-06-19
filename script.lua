@@ -94,7 +94,7 @@ end
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local selectedIndex = GetRandomInteger(1, #Shells, "dice roll")	
 
-    --selectedIndex = 19
+    selectedIndex = 22
 
     local proj = Shells[selectedIndex]
 
