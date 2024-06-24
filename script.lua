@@ -6,22 +6,22 @@ ShellScripts = {
         ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
     end,
     DoShell_2_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("EffectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
     end,
     DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("EffectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
     end,
     DoShell_4_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
     end,
     DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
     end,
     DoShell_6_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end,
@@ -88,7 +88,7 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll = GetRandomInteger(1, 20, "dice roll")
-    roll = 20
+    --roll = 20
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
@@ -132,11 +132,11 @@ function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroy
     local name = GetNodeProjectileSaveName(nodeId)
     if IsShellNumberGreater(name,13) then
         Log(tostring(teamId))
-        dlc2_CreateProjectile("EffectShellSmoke", "", teamId, pos, Vec3(0,0), 0)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, pos, Vec3(0,0), 0)
     end
 
     if IsShellNumberGreater(name,17) then
-        dlc2_CreateProjectile("EffectShellMagnet", "", teamId,pos, Vec3(0,0), 0)
+        dlc2_CreateProjectile("effectShellMagnet", "", teamId,pos, Vec3(0,0), 0)
     end
 
     if (IsShellNumberBelowOrEqual(name,7)) and destroyType == 2 then
