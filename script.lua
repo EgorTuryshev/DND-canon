@@ -1,12 +1,6 @@
 dofile("scripts/forts.lua")
 dofile(path .. "/globals.lua")
 
-Shells = {"shell1", "shell2", "shell3", "shell4", "shell5", 
-          "shell6", "shell7", "shell8", "shell9", "shell10",
-          "shell11", "shell12", "shell13", "shell14", "shell15",
-          "shell16", "shell17", "shell18", "shell19", "shell20", 
-          "unluckMarker", "fireball"}
-
 ShellScripts = {
     DoShell_1_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
         ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
@@ -28,7 +22,6 @@ ShellScripts = {
     end,
     DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
         dlc2_CreateProjectile("EffectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-
     end,
     DoShell_6_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end,
@@ -59,8 +52,10 @@ ShellScripts = {
     DoShell_19_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end,
     DoShell_20_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
-        CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
+        if proj == "shell20" then
+            CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
+            CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
+        end
     end}
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
@@ -92,18 +87,16 @@ function OnWeaponFiredpcall(teamId, saveName, weaponId, projectileNodeId, projec
 end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
-    local selectedIndex = GetRandomInteger(1, #Shells, "dice roll")	
-
-    selectedIndex = 22
-
-    local proj = Shells[selectedIndex]
+    local roll = GetRandomInteger(1, 20, "dice roll")
+    roll = 20
+    local variations = ProjectileVariations[roll]
+    local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
+    local proj = variations[selectedIndex]
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
+    SpawnEffect(path .. "/effects/roll_" .. roll .. ".lua", GetRollEffectPos(origWeaponId))
 
-    local effect = selectedIndex > 20 and 20 or selectedIndex
-    SpawnEffect(path .. "/effects/roll_" .. effect .. ".lua", GetRollEffectPos(origWeaponId))
-
-    local functionName = "DoShell_" .. selectedIndex .. "_Script"
+    local functionName = "DoShell_" .. roll .. "_Script"
     if ShellScripts[functionName] then
         ShellScripts[functionName](origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end
@@ -146,8 +139,6 @@ function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroy
         dlc2_CreateProjectile("EffectShellMagnet", "", teamId,pos, Vec3(0,0), 0)
     end
 
-
-
     if (IsShellNumberBelowOrEqual(name,7)) and destroyType == 2 then
         
         local age = GetNodeProjectileTimeRemaining(nodeId)
@@ -187,7 +178,19 @@ function Load()
     if not data.AgeTriggers then data.AgeTriggers = {} end
     EnableWeapon("unluckStorm", false, 1)
 	EnableWeapon("unluckStorm", false, 2)
-    -- need to do cleanup 
+    if Projectiles then
+        for i = #Projectiles, 1, -1 do
+            local proj = Projectiles[i]
+            if proj then
+                DestroyProjectile(proj)
+                table.remove(Projectiles, i)
+            end
+        end
+    end
+
+    for key in pairs(data.AgeTriggers) do
+        data.AgeTriggers[key] = nil
+    end
 end
 ---------------------------------------------------------------------------------------------------------
 function Vec3MultiplyScalar(vec, scalar)

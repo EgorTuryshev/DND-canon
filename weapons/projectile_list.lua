@@ -1,80 +1,40 @@
+ --- forts API ---
 dofile("scripts/type.lua")
+dofile(path .. "/globals.lua")
+
 local howitzer = FindProjectile("howitzer")
 
-local buffArray = {0.6, 0.8, 1, 1.3, 1.67}
-
-if howitzer then
-    
-    for i = 1, 10 do
+if howitzer then  
+    local function createShell(i, config)
         local newShell = DeepCopy(howitzer)
-        local buffIndex = 1
-        if i > 6 then buffIndex = 2 end
-        if i > 9 then buffIndex = 3 end
-        
         newShell.SaveName = "shell" .. i
-        newShell.ProjectileDamage = newShell.ProjectileDamage*buffArray[3]
-        newShell.AntiAirHitpoints = newShell.AntiAirHitpoints*buffArray[buffIndex]
-        newShell.Impact = newShell.Impact*buffArray[buffIndex]
-        newShell.ProjectileSplashDamage = newShell.ProjectileSplashDamage*buffArray[buffIndex]
-        newShell.ProjectileSplashDamageMaxRadius = newShell.ProjectileSplashDamageMaxRadius*buffArray[buffIndex]
-        newShell.ProjectileSprite = path.. "/weapons/sprites/shell" .. i .. ".png"
+        newShell.ProjectileDamage = newShell.ProjectileDamage * config.modificator
+        newShell.AntiAirHitpoints = newShell.AntiAirHitpoints * config.antiAirHpMod
+        newShell.Impact = newShell.Impact * config.modificator
+        newShell.ProjectileSplashDamage = newShell.ProjectileSplashDamage * config.modificator
+        newShell.ProjectileSplashDamageMaxRadius = newShell.ProjectileSplashDamageMaxRadius * config.modificator
+        newShell.ProjectileSprite = path .. "/weapons/sprites/shell" .. i .. ".png"
         newShell.ProjectileThickness = 10.0
         newShell.ProjectileShootDownRadius = 60
         newShell.DndProjectile = true
         newShell.CollidesWithLike = false
-
-        if i <9 then
-            newShell.DestroyShields = false
-            newShell.DeflectedByShields = true
+        newShell.DestroyShields = config.shield.DestroyShields
+        newShell.DeflectedByShields = config.shield.DeflectedByShields
+        if config.shield.DeflectedByShields then
             newShell.MomentumThreshold =
-                {
-                    ["armour"] = { Reflect = 1000000, Penetrate = 4000 },
-                    ["door"] = { Reflect = 1000000, Penetrate = 4000 },
-                }
+            {
+                ["armour"] = { Reflect = 1000000, Penetrate = 4000 },
+                ["door"] = { Reflect = 1000000, Penetrate = 4000 },
+            }
         end
-        Projectiles[#Projectiles+1] = newShell
+        Projectiles[#Projectiles + 1] = newShell
     end
 
-    for i = 11, 19 do
-        local newShell = DeepCopy(howitzer)
-        local buffIndex = 3
-        if i > 11 then buffIndex = 4 end
-        if i > 14 then buffIndex = 5 end
-  
-        newShell.SaveName = "shell" .. i
-        newShell.ProjectileDamage = newShell.ProjectileDamage*buffArray[buffIndex]
-        newShell.AntiAirHitpoints = newShell.AntiAirHitpoints*buffArray[buffIndex]
-        newShell.Impact = newShell.Impact*buffArray[buffIndex]
-        newShell.ProjectileSplashDamage = newShell.ProjectileSplashDamage*buffArray[3]
-        newShell.ProjectileSplashDamageMaxRadius = newShell.ProjectileSplashDamageMaxRadius*buffArray[buffIndex]
-        newShell.ProjectileSprite = path.. "/weapons/sprites/shell" .. i .. ".png"
-        newShell.ProjectileThickness = 10.0
-        newShell.ProjectileShootDownRadius = 60
-        newShell.DndProjectile = true
-        newShell.CollidesWithLike = false
-        
-        if i>15 then
-            newShell.ProjectileIncendiary = true
-            newShell.IncendiaryRadius = 100
-            newShell.IncendiaryRadiusHeated = 200
-            newShell.AlwaysIncendiary = true
-            newShell.incendiaryOffset = 100
+    for _, config in ipairs(ProjectileConfigs) do
+        for i = config.range[1], config.range[2] do
+            createShell(i, config)
         end
-        
-        if i>16 then
-            newShell.EMPRadius = 150
-            newShell.EMPDuration = 10
-            newShell.EnemyCanTeleport = false
-        end
-
-        if i>18 then
-            newShell.AntiAirHitpoints = newShell.AntiAirHitpoints*3
-        end
-
-
-        Projectiles[#Projectiles+1] = newShell
     end
-
     
     local shell20 = DeepCopy(howitzer)
     shell20.SaveName = "shell20"
@@ -109,6 +69,7 @@ local unluckMarker = DeepCopy(FindProjectile("ol_marker_sweep"))
 if unluckMarker then
 	unluckMarker.SaveName = "unluckMarker"
     unluckMarker.DndProjectile = true
+    unluckMarker.CollidesWithLike = false -- fix needed
     unluckMarker.Projectile =
 	{
 		Root =
@@ -117,7 +78,7 @@ if unluckMarker then
 			Angle = 0,
 			Sprite = path.. "/weapons/sprites/shell20.png",
 			PivotOffset = {0, 0},
-			Scale = 4.0,
+			Scale = 2.5,
 		}
 	}
     unluckMarker.Effects =
@@ -227,4 +188,3 @@ if unluckShell then
 end
 
 table.insert(Projectiles, myNewProjectile)
-
