@@ -59,6 +59,34 @@ Sprites =
 			},
 		},
 	},
+	{
+		Name = "cannon_shoot",
+		States =
+		{
+			Normal =
+			{
+				Frames =
+				{
+					-- the last frame is blank to prevent looping
+					{ texture = path .. "/effects/media/shoot_1.png" },
+					{ texture = path .. "/effects/media/shoot_2.png" },
+					{ texture = path .. "/effects/media/shoot_3.png" },
+					{ texture = path .. "/effects/media/shoot_4.png" },
+					{ texture = path .. "/effects/media/shoot_5.png" },
+					{ texture = path .. "/effects/media/shoot_6.png" },
+					{ texture = path .. "/effects/media/shoot_7.png" },
+					{ texture = path .. "/effects/media/shoot_8.png" },
+					{ texture = path .. "/effects/media/shoot_8.png", colour = { 1, 1, 1, 0 }, duration = 2 },
+
+
+					duration = 0.05,
+					blendColour = true,
+					blendCoordinates = false,
+				},
+                NextState = "Normal",
+			},
+		},
+	},
 }
 
 -- list of sub-effects that make up this effect
@@ -75,6 +103,26 @@ Effects =
 		Sprite = "dice_roll", -- defined above
 		Additive = false,
 		TimeToLive = 1.5,
+		InitialSize = 1,
+		ExpansionRate = 0,
+		Angle = -90,
+		AngleMaxDeviation = 0,
+		AngularVelocity = 0,
+		RandomAngularVelocityMagnitude = 0,
+		Colour1 = { 255, 255, 255, 255 },
+		Colour2 = { 255, 255, 255, 255 },
+	},
+	{
+		Type = "sprite",
+		PlayForEnemy = true,
+		TimeToTrigger = 1.5,
+		LocalPosition = { x = 0, y = 200, z = 0 },
+		LocalVelocity = { x = 0, y = 0, z = 0 },
+		Acceleration = { x = 0, y = 0, z = 0 },
+		Drag = 0.0,
+		Sprite = "cannon_shoot", -- defined above
+		Additive = false,
+		TimeToLive = 0.4,
 		InitialSize = 1,
 		ExpansionRate = 0,
 		Angle = -90,
