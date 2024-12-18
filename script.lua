@@ -92,6 +92,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
+    --proj = "unluckMarker"
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
     SpawnEffect(path .. "/effects/roll_" .. roll .. ".lua", GetRollEffectPos(origWeaponId))

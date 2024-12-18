@@ -95,7 +95,7 @@ local unluckMarker = DeepCopy(FindProjectile("ol_marker_sweep"))
 if unluckMarker then
 	unluckMarker.SaveName = "unluckMarker"
     unluckMarker.DndProjectile = true
-    unluckMarker.CollidesWithLike = false -- fix needed
+    unluckMarker.CollidesWithProjectiles = false
     unluckMarker.Projectile =
 	{
 		Root =
