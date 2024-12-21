@@ -1,3 +1,4 @@
+-- Important Line!
 -- Position for roll ending effect for both teams (angular distance of a hardpoint)
 RollEffectAngularDistance = 200
 
