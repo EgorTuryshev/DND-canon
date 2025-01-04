@@ -12,12 +12,12 @@ TimeToMaxSin = 3 -- Time interval of how fast the projectile reaches max amplitu
 -- Piecewise function-like table for defining power of each range of d20 rolls
 ProjectileConfigs = 
 {
-    {range = {1, 6}, modificator = 1, antiAirHpMod = 0.6, isShrapnel = false, shield = {DestroyShields = false, DeflectedByShields = true}},
-    {range = {7, 9}, modificator = 1, antiAirHpMod = 0.8, isShrapnel = false, shield = {DestroyShields = false, DeflectedByShields = true}},
-    {range = {10, 10}, modificator = 1, antiAirHpMod = 1, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}},
-    {range = {11, 11}, modificator = 1, antiAirHpMod = 1, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}},
-    {range = {12, 14}, modificator = 1.33, antiAirHpMod = 1.33, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}},
-    {range = {15, 19}, modificator = 1.67, antiAirHpMod = 1.67, isShrapnel = true, shield = {DestroyShields = true, DeflectedByShields = false}},
+    {range = {1, 6}, modificator = 1, antiAirHpMod = 0.6, isShrapnel = false, shield = {DestroyShields = false, DeflectedByShields = true}, isSin = true},
+    {range = {7, 9}, modificator = 1, antiAirHpMod = 0.8, isShrapnel = false, shield = {DestroyShields = false, DeflectedByShields = true}, isSin = true},
+    {range = {10, 10}, modificator = 1, antiAirHpMod = 1, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {11, 11}, modificator = 1, antiAirHpMod = 1, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {12, 14}, modificator = 1.33, antiAirHpMod = 1.33, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {15, 19}, modificator = 1.67, antiAirHpMod = 1.67, isShrapnel = true, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
 }
 
 -- Table for linking d20 roll with pool of projectiles for equally distributed chance

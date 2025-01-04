@@ -35,6 +35,17 @@ if howitzer then
                 ["door"] = { Reflect = 1000000, Penetrate = 4000 },
             }
         end
+        if config.modificator > 1 then
+            newShell.DamageMultiplier = 
+            {
+                { SaveName = "bracing", Direct = 1, Splash = 4.8/config.modificator },
+                { SaveName = "backbracing", Direct = config.modificator, Splash = 3.2/config.modificator }
+            }
+        end
+
+
+
+
         if config.isShrapnel then
             newShell.Effects = 
             {
@@ -147,29 +158,29 @@ for i, v in ipairs(Projectiles) do
    end
 end    
 
-local shellShrapnel = DeepCopy(FindProjectile("mortar"))
+local shellShrapnel = DeepCopy(FindProjectile("sniper"))
     shellShrapnel.SaveName = "shellShrapnel"
-    shellShrapnel.ProjectileType = "mortar"
+    --shellShrapnel.ProjectileType = "mortar"
     shellShrapnel.ProjectileSprite = "weapons/media/bullet"
     shellShrapnel.ProjectileSpriteMipMap = false
     shellShrapnel.DrawBlurredProjectile = true
-    shellShrapnel.ProjectileMass = 16
-    shellShrapnel.ProjectileDrag = 0
-    shellShrapnel.Impact = 20000
+    --shellShrapnel.ProjectileMass = 16
+    --shellShrapnel.ProjectileDrag = 0
+    --shellShrapnel.Impact = 20000
     shellShrapnel.DisableShields = false
     shellShrapnel.DeflectedByShields = true
     shellShrapnel.PassesThroughMaterials = false
-    shellShrapnel.ExplodeOnTouch = false
-    shellShrapnel.ProjectileThickness = 4.0
-    shellShrapnel.ProjectileShootDownRadius = 60
-    shellShrapnel.BeamTileRate = 0.02
-    shellShrapnel.ProjectileDamage = 30.0
-    shellShrapnel.ProjectileSplashDamage = 20.0
-    shellShrapnel.ProjectileSplashDamageMaxRadius = 100.0
-    shellShrapnel.WeaponDamageBonus = 40
-    shellShrapnel.ProjectileSplashMaxForce = 10000
-    shellShrapnel.AntiAirHitpoints = 40
-    shellShrapnel.SpeedIndicatorFactor = 0.25
+    --shellShrapnel.ExplodeOnTouch = false
+    --shellShrapnel.ProjectileThickness = 4.0
+    --shellShrapnel.ProjectileShootDownRadius = 60
+    --shellShrapnel.BeamTileRate = 0.02
+    --shellShrapnel.ProjectileDamage = 30.0
+    --shellShrapnel.ProjectileSplashDamage = 20.0
+    --shellShrapnel.ProjectileSplashDamageMaxRadius = 100.0
+    --shellShrapnel.WeaponDamageBonus = 40
+    --shellShrapnel.ProjectileSplashMaxForce = 10000
+    --shellShrapnel.AntiAirHitpoints = 40
+    --shellShrapnel.SpeedIndicatorFactor = 0.25
     shellShrapnel.TrailEffect = "mods/weapon_pack/effects/20mmcannon_trail.lua"
     shellShrapnel.Effects = 
     {
@@ -184,7 +195,7 @@ local shellShrapnel = DeepCopy(FindProjectile("mortar"))
             ["shield"] = { Effect = "effects/energy_shield_ricochet.lua", Splash = false },
         },
     }
-    shellShrapnel.DamageMultiplier = 
+    --[[shellShrapnel.DamageMultiplier = 
     {
         { SaveName = "sandbags", Direct = 0.4, Splash = 0.4 },
         { SaveName = "armour", Direct = 0.7, Splash = 0.7 },
@@ -192,7 +203,7 @@ local shellShrapnel = DeepCopy(FindProjectile("mortar"))
         { SaveName = "weapon", Direct = 1.0, Splash = 1.5 },
         { SaveName = "device", Direct = 3.0, Splash = 1.5 },
         { SaveName = "reactor", Direct = 0.3, Splash = 0.3 },
-    }
+    }--]]
 Projectiles[#Projectiles+1] = shellShrapnel
 
 local effectShellFire = DeepCopy(FindProjectile("shrapnel"))

@@ -59,7 +59,7 @@ ShellScripts = {
     end}
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
-    if(IsShellNumberBelowOrEqual(GetNodeProjectileSaveName(projectileNodeId), 9)) then
+    if(IsProjectileSin(GetNodeProjectileSaveName(projectileNodeId))) then
         KeepSinTrajectory(projectileNodeId, teamId, 0)
     end
     if weaponId ~= -1 and saveName == "dndanon" then
@@ -88,7 +88,7 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll = GetRandomInteger(1, 20, "dice roll")
-    --roll = 20
+    roll = 20
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
@@ -226,6 +226,23 @@ function IsShellNumberGreater(name, number)
     end
     return false
 
+end
+
+-- Функция для проверки попадания в конфигурацию с isSin = true
+function IsProjectileSin(shellName)
+    -- Извлекаем номер снаряда из строки (например, "shell1" -> 1)
+    local shellNumber = tonumber(string.match(shellName, "%d+"))
+    if not shellNumber then return false end -- Если номер не найден, возвращаем false
+
+    -- Проходим по всем конфигурациям
+    for _, config in ipairs(ProjectileConfigs) do
+        -- Проверяем, входит ли номер в диапазон и имеет ли isSin = true
+        if shellNumber >= config.range[1] and shellNumber <= config.range[2] and config.isSin == true then
+            return true -- Снаряд попадает в нужную конфигурацию
+        end
+    end
+
+    return false -- Если не найдено, возвращаем false
 end
 
 function SetProjectileVelocity(nodeId, teamId, velocity)
