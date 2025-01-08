@@ -10,9 +10,9 @@ if howitzer then
                 FileName = path .. "/weapons/dndanon.lua",
                 Icon = "hud-dndanon-icon",
 				Detail = "hud-detail-dndanon",
-                MetalCost = 950,
-                EnergyCost = 8500,
-				BuildTimeComplete = 40,
+                MetalCost = 1000,
+                EnergyCost = 10000,
+				--BuildTimeComplete = 40,
                 Prerequisite = "munitions",
                 Enabled = true,
             }

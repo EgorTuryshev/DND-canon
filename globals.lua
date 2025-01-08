@@ -12,12 +12,18 @@ TimeToMaxSin = 3 -- Time interval of how fast the projectile reaches max amplitu
 -- Piecewise function-like table for defining power of each range of d20 rolls
 ProjectileConfigs = 
 {
-    {range = {1, 6}, modificator = 1, antiAirHpMod = 0.6, isShrapnel = false, shield = {DestroyShields = false, DeflectedByShields = true}, isSin = true},
-    {range = {7, 9}, modificator = 1, antiAirHpMod = 0.8, isShrapnel = false, shield = {DestroyShields = false, DeflectedByShields = true}, isSin = true},
-    {range = {10, 10}, modificator = 1, antiAirHpMod = 1, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
-    {range = {11, 11}, modificator = 1, antiAirHpMod = 1, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
-    {range = {12, 14}, modificator = 1.33, antiAirHpMod = 1.33, isShrapnel = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
-    {range = {15, 19}, modificator = 1.67, antiAirHpMod = 1.67, isShrapnel = true, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {1, 6}, modificator = 1, antiAirHpMod = 0.6, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = false, DeflectedByShields = true}, isSin = true},
+    {range = {7, 7}, modificator = 1, antiAirHpMod = 0.8, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = false, DeflectedByShields = true}, isSin = true},
+    {range = {8, 8}, modificator = 1, antiAirHpMod = 0.8, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = true},
+    {range = {9, 9}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = true},
+    {range = {10, 10}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {11, 11}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {12, 13}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {14, 14}, modificator = 1.25, antiAirHpMod = 1.25, flameRadius = 0, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {15, 16}, modificator = 1.25, antiAirHpMod = 1.25, flameRadius = 120, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {17, 17}, modificator = 1.5, antiAirHpMod = 1.5, flameRadius = 180, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {18, 18}, modificator = 1.5, antiAirHpMod = 1.5, flameRadius = 180, shrapnelPower = 2, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {19, 19}, modificator = 1.5, antiAirHpMod = 1.5, flameRadius = 180, shrapnelPower = 2, isEmpPortals = true, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
 }
 
 -- Table for linking d20 roll with pool of projectiles for equally distributed chance

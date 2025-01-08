@@ -7,17 +7,18 @@ ShellScripts = {
     end,
     DoShell_2_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
         dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellMagnet", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellMagnet", "", (teamId % 100 == 1) and 2 or 1,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
         dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        Log(tostring((teamId % 100 == 1) and 2 or 1))
     end,
     DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
         dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
         dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
     end,
     DoShell_4_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
         dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
     end,
     DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
@@ -88,7 +89,7 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll = GetRandomInteger(1, 20, "dice roll")
-    roll = 20
+    --roll = 1
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
@@ -131,16 +132,16 @@ function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroy
     local velocity = NodeVelocity(nodeId)
     local pos = NodePosition(nodeId)
     local name = GetNodeProjectileSaveName(nodeId)
-    if IsShellNumberGreater(name,13) then
-        Log(tostring(teamId))
+    if IsShellNumberGreater(name,12) then
+        --Log(tostring(teamId))
         dlc2_CreateProjectile("effectShellSmoke", "", teamId, pos, Vec3(0,0), 0)
     end
 
-    if IsShellNumberGreater(name,17) then
+    if IsShellNumberGreater(name,15) then
         dlc2_CreateProjectile("effectShellMagnet", "", teamId,pos, Vec3(0,0), 0)
     end
 
-    if (IsShellNumberBelowOrEqual(name,7)) and destroyType == 2 then
+    if (IsShellNumberBelowOrEqual(name,6)) and destroyType == 2 then
         
         local age = GetNodeProjectileTimeRemaining(nodeId)
         if teamId%100 == 1 then
@@ -149,8 +150,8 @@ function OnProjectileDestroyed(nodeId, teamId, saveName, structureIdHit, destroy
             teamId = 1
         end
         CreateDeviation(-180, name, teamId, pos, velocity, age, nodeId)
-    elseif name == "shell17" and destroyType == 5 and teamId ~= damagedTeamId then
-        DeleteBeforeDestroyMinigame(damagedTeamId)
+    --[[elseif name == "shell17" and destroyType == 5 and teamId ~= damagedTeamId then
+        DeleteBeforeDestroyMinigame(damagedTeamId)--]]
     end
 end
 
@@ -218,9 +219,8 @@ function IsShellNumberBelowOrEqual(name, number)
 end
 
 function IsShellNumberGreater(name, number)
-    number = 20-number
-    for i = 1,number do
-        if name == "shell" .. 20-i then
+    for i = number+1, 20 do
+        if name == "shell" .. i then
             return true
         end
     end
@@ -306,7 +306,7 @@ function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeap
     end
 end
 
-function DeleteBeforeDestroyMinigame(teamId)
+function DeleteBeforeDestroyMinigame(teamId)  --Currently unused
     local devices = GetDeviceCountSide(teamId)
     local selectedIndex = GetRandomInteger(0, devices, "destroyed device")
     local DeviceToDestroy = GetDeviceIdSide(teamId, selectedIndex)

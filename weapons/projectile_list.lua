@@ -5,8 +5,15 @@ dofile(path .. "/globals.lua")
 local fragSplit = 
 {
     Effect = "effects/mortar_air_burst.lua",
-    Projectile = { Count = 30, Type = "shellShrapnel", Speed = 2000, StdDev = 1.0 },
-    Offset = -120,
+    Projectile = { Count = 12, Type = "shellShrapnel", Speed = 2000, StdDev = 360.0 },
+    --Offset = -120,
+    Terminate = true,
+}
+local upgradedFragSplit = 
+{
+    Effect = "effects/mortar_air_burst.lua",
+    Projectile = { Count = 12, Type = "shellShrapnel2", Speed = 2000, StdDev = 360.0 },
+    --Offset = -120,
     Terminate = true,
 }
 
@@ -38,15 +45,16 @@ if howitzer then
         if config.modificator > 1 then
             newShell.DamageMultiplier = 
             {
-                { SaveName = "bracing", Direct = 1, Splash = 4.8/config.modificator },
+                { SaveName = "bracing", Direct = 1/config.modificator, Splash = 4.8/config.modificator },
                 { SaveName = "backbracing", Direct = config.modificator, Splash = 3.2/config.modificator }
             }
         end
-
-
-
-
-        if config.isShrapnel then
+        if config.flameRadius > 0 then
+            newShell.AlwaysIncendiary = true
+            newShell.IncendiaryRadius = config.flameRadius
+            newShell.IncendiaryRadiusHeated = config.flameRadius/2
+        end
+        if config.shrapnelPower == 1 then
             newShell.Effects = 
             {
                 Impact = {
@@ -63,6 +71,29 @@ if howitzer then
                     --t200 = fragSplit,
                 },
             }
+        end
+        if config.shrapnelPower == 2 then
+            newShell.Effects = 
+            {
+                Impact = {
+                    ["armour"] = upgradedFragSplit,
+                    ["bracing"] = upgradedFragSplit,
+                    ["default"] = upgradedFragSplit,
+                },
+                Deflect = {
+                    ["armour"] = "effects/armor_ricochet.lua",
+                    ["door"] = "effects/armor_ricochet.lua",
+                    ["shield"] = "effects/energy_shield_ricochet.lua",
+                },
+                Age = {
+                    --t200 = fragSplit,
+                },
+            }
+        end
+        if config.isEmpPortals then
+            newShell.EnemyCanTeleport=false
+            newShell.EMPRadius=320
+            newShell.EMPDuration=10
         end
         Projectiles[#Projectiles + 1] = newShell
     end
@@ -160,27 +191,37 @@ end
 
 local shellShrapnel = DeepCopy(FindProjectile("sniper"))
     shellShrapnel.SaveName = "shellShrapnel"
-    --shellShrapnel.ProjectileType = "mortar"
     shellShrapnel.ProjectileSprite = "weapons/media/bullet"
     shellShrapnel.ProjectileSpriteMipMap = false
-    shellShrapnel.DrawBlurredProjectile = true
-    --shellShrapnel.ProjectileMass = 16
-    --shellShrapnel.ProjectileDrag = 0
-    --shellShrapnel.Impact = 20000
-    shellShrapnel.DisableShields = false
-    shellShrapnel.DeflectedByShields = true
-    shellShrapnel.PassesThroughMaterials = false
-    --shellShrapnel.ExplodeOnTouch = false
-    --shellShrapnel.ProjectileThickness = 4.0
-    --shellShrapnel.ProjectileShootDownRadius = 60
-    --shellShrapnel.BeamTileRate = 0.02
-    --shellShrapnel.ProjectileDamage = 30.0
-    --shellShrapnel.ProjectileSplashDamage = 20.0
-    --shellShrapnel.ProjectileSplashDamageMaxRadius = 100.0
-    --shellShrapnel.WeaponDamageBonus = 40
-    --shellShrapnel.ProjectileSplashMaxForce = 10000
-    --shellShrapnel.AntiAirHitpoints = 40
-    --shellShrapnel.SpeedIndicatorFactor = 0.25
+    shellShrapnel.TrailEffect = "mods/weapon_pack/effects/20mmcannon_trail.lua"
+    shellShrapnel.Effects = 
+    {
+        Impact = 
+        {
+            ["default"] = "effects/impact_medium.lua",
+        },
+        Deflect = 
+        {
+            ["armour"] = { Effect = "effects/armor_ricochet.lua", Splash = false },
+            ["door"] = { Effect = "effects/armor_ricochet.lua", Splash = false },
+            ["shield"] = { Effect = "effects/energy_shield_ricochet.lua", Splash = false },
+        },
+    }
+    --[[shellShrapnel.DamageMultiplier = 
+    {
+        { SaveName = "sandbags", Direct = 0.4, Splash = 0.4 },
+        { SaveName = "armour", Direct = 0.7, Splash = 0.7 },
+        { SaveName = "door", Direct = 0.5, Splash = 0.5 },
+        { SaveName = "weapon", Direct = 1.0, Splash = 1.5 },
+        { SaveName = "device", Direct = 3.0, Splash = 1.5 },
+        { SaveName = "reactor", Direct = 0.3, Splash = 0.3 },
+    }--]]
+Projectiles[#Projectiles+1] = shellShrapnel
+
+local shellShrapnel = DeepCopy(FindProjectile("sniper2"))
+    shellShrapnel.SaveName = "shellShrapnel2"
+    shellShrapnel.ProjectileSprite = "weapons/media/bullet"
+    shellShrapnel.ProjectileSpriteMipMap = false
     shellShrapnel.TrailEffect = "mods/weapon_pack/effects/20mmcannon_trail.lua"
     shellShrapnel.Effects = 
     {
@@ -221,7 +262,7 @@ local effectShellSmoke = DeepCopy(FindProjectile("smokebomb"))
 effectShellSmoke.SaveName = "effectShellSmoke"
 effectShellSmoke.ProjectileDamage = 0
 effectShellSmoke.DndProjectile = false
-effectShellSmoke.MaxAge = 15
+effectShellSmoke.MaxAge = 7
 Projectiles[#Projectiles+1] = effectShellSmoke
 
 local effectShellEMP = DeepCopy(FindProjectile("shrapnel"))
@@ -229,22 +270,21 @@ effectShellEMP.SaveName = "effectShellEMP"
 effectShellEMP.ProjectileDamage = 0
 effectShellEMP.DndProjectile = false
 effectShellEMP.EMPRadius = 150
-effectShellEMP.EMPDuration = 10
+effectShellEMP.EMPDuration = 7
 Projectiles[#Projectiles+1] = effectShellEMP
-
 
 if moonshot then
 	local effectShellMagnet = DeepCopy(FindProjectile("magneticfield"))
 	effectShellMagnet.SaveName = "effectShellMagnet"
-    effectShellMagnet.FieldRadius = 200.0
-    effectShellMagnet.MagneticModifierFriendly = 0
-    effectShellMagnet.MagneticModifierEnemy = 0.5
-    effectShellMagnet.FieldIntersectionNearest = false
-    effectShellMagnet.FieldStrengthMax = 500
-    effectShellMagnet.FieldStrengthFalloffPower = 0.5
-    effectShellMagnet.FieldType = 2
-	effectShellMagnet.MaxAge = 4
-	effectShellMagnet.Gravity = 0
+    --effectShellMagnet.FieldRadius = 500.0
+    --effectShellMagnet.MagneticModifierFriendly = 0.3
+    --effectShellMagnet.MagneticModifierEnemy = 1
+    --effectShellMagnet.FieldIntersectionNearest = false
+    --effectShellMagnet.FieldStrengthMax = 500
+    --effectShellMagnet.FieldStrengthFalloffPower = 0.8
+    --effectShellMagnet.FieldType = 1
+	--effectShellMagnet.MaxAge = 7
+	--effectShellMagnet.Gravity = 0
 	Projectiles[#Projectiles+1] = effectShellMagnet
 end
 
