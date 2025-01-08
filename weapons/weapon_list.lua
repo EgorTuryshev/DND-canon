@@ -12,9 +12,10 @@ if howitzer then
 				Detail = "hud-detail-dndanon",
                 MetalCost = 1000,
                 EnergyCost = 10000,
-				--BuildTimeComplete = 40,
+				BuildTimeComplete = 140,
                 Prerequisite = "munitions",
                 Enabled = true,
+				PopulationCap = 2
             }
         )
     )

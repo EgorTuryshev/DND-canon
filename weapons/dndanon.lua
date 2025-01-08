@@ -1,16 +1,17 @@
 dofile("mods/dlc1_weapons/weapons/howitzer.lua")
 dofile("scripts/device_utility.lua")
+dofile(path .. "/globals.lua")
 
 Sprites = {}
 Projectile = "shell1"
 --FireEffect = "mods/dlc1_weapons/effects/fire_howitzer.lua"
 FireEffect = path .. "/effects/dice_roll.lua"
 --ShellEffect = "mods/dlc1_weapons/effects/shell_eject_howitzer.lua"
-ConstructEffect = "effects/device_upgrade.lua"
+ConstructEffect = "effects/device_construct.lua"
 CompleteEffect = "effects/device_complete.lua"
 DestroyEffect = "mods/dlc1_weapons/effects/howitzer_explode.lua"
 ReloadEffect = "mods/dlc1_weapons/effects/reload_howitzer.lua"
-WeaponMass = 600
+WeaponMass = 150
 MinFireAngle = 10
 MaxFireAngle = 60
 Hitpoints = 450
@@ -18,6 +19,7 @@ DeviceSplashDamage = 375
 DeviceSplashMaxRadius = 230
 StructureSplashDamage = 230
 ProjectileSplashDamageMaxRadius = 230
+ReloadTime = Reload
 MetalFireCost = 120
 EnergyFireCost = 6500
 Recoil = 2000000

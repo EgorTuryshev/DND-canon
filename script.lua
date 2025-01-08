@@ -10,7 +10,7 @@ ShellScripts = {
         dlc2_CreateProjectile("effectShellMagnet", "", (teamId % 100 == 1) and 2 or 1,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
         dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
         dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        Log(tostring((teamId % 100 == 1) and 2 or 1))
+        --Log(tostring((teamId % 100 == 1) and 2 or 1))
     end,
     DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
         dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
@@ -89,7 +89,7 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll = GetRandomInteger(1, 20, "dice roll")
-    --roll = 20
+    roll = 20
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
