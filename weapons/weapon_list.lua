@@ -15,7 +15,7 @@ if howitzer then
 				BuildTimeComplete = 140,
                 Prerequisite = "munitions",
                 Enabled = true,
-				PopulationCap = 2
+				PopulationCap = 4
             }
         )
     )

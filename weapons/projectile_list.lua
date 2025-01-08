@@ -32,6 +32,7 @@ if howitzer then
         newShell.ProjectileThickness = 10.0
         newShell.ProjectileShootDownRadius = 60
         newShell.DndProjectile = true
+        newShell.ProjectileIncendiary = false
         newShell.CollidesWithLike = false
         newShell.DestroyShields = config.shield.DestroyShields
         newShell.DeflectedByShields = config.shield.DeflectedByShields
