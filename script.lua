@@ -89,11 +89,11 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll = GetRandomInteger(1, 20, "dice roll")
-    roll = 20
+    --roll = 20
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
-    proj = "shellTriple"
+    --proj = "shellTriple"
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
     SpawnEffect(path .. "/effects/roll_" .. roll .. ".lua", GetRollEffectPos(origWeaponId))
