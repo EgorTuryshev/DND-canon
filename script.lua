@@ -89,7 +89,7 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll = GetRandomInteger(1, 20, "dice roll")
-    roll = 20
+    --roll = 20
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
