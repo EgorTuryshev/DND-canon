@@ -35,7 +35,7 @@ for /r %%i in (.gitignore) do (
 )
 
 :: Удаление файлов README
-for /r %%i in (README) do (
+for /r %%i in (README.md) do (
     echo Удаление файла: %%i
     del /f /q "%%i"
 )
