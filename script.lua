@@ -53,9 +53,9 @@ ShellScripts = {
     DoShell_19_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
     end,
     DoShell_20_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        if proj == "shell20" then
-            CreateDeviation(10, proj, teamId, pos, velocity, age, projectileId)
-            CreateDeviation(-10, proj, teamId, pos, velocity, age, projectileId)
+        if proj == "shellTriple" then
+            CreateDeviation(3, proj, teamId, pos, velocity, age, projectileId)
+            CreateDeviation(-3, proj, teamId, pos, velocity, age, projectileId)
         end
     end}
 
@@ -89,11 +89,11 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll = GetRandomInteger(1, 20, "dice roll")
-    --roll = 1
+    roll = 20
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
-    --proj = "unluckMarker"
+    proj = "shellTriple"
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
     SpawnEffect(path .. "/effects/roll_" .. roll .. ".lua", GetRollEffectPos(origWeaponId))
@@ -231,7 +231,7 @@ end
 -- Функция для проверки попадания в конфигурацию с isSin = true
 function IsProjectileSin(shellName)
     -- Извлекаем номер снаряда из строки (например, "shell1" -> 1)
-    local shellNumber = tonumber(string.match(shellName, "%d+"))
+    local shellNumber = tonumber(string.match(shellName, "^shell(%d+)$"))
     if not shellNumber then return false end -- Если номер не найден, возвращаем false
 
     -- Проходим по всем конфигурациям

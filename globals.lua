@@ -17,8 +17,8 @@ ProjectileConfigs =
     {range = {8, 8}, modificator = 1, antiAirHpMod = 0.8, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = true},
     {range = {9, 9}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = true},
     {range = {10, 10}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
-    {range = {11, 11}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
-    {range = {12, 13}, modificator = 1, antiAirHpMod = 1, flameRadius = 0, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {11, 11}, modificator = 1, antiAirHpMod = 1.25, flameRadius = 0, shrapnelPower = 0, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
+    {range = {12, 13}, modificator = 1, antiAirHpMod = 1.25, flameRadius = 0, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
     {range = {14, 14}, modificator = 1.25, antiAirHpMod = 1.25, flameRadius = 0, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
     {range = {15, 16}, modificator = 1.25, antiAirHpMod = 1.25, flameRadius = 120, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
     {range = {17, 17}, modificator = 1.5, antiAirHpMod = 1.5, flameRadius = 180, shrapnelPower = 1, isEmpPortals = false, shield = {DestroyShields = true, DeflectedByShields = false}, isSin = false},
@@ -48,5 +48,5 @@ ProjectileVariations =
     [17] = {"shell17"},
     [18] = {"shell18"},
     [19] = {"shell19"},
-    [20] = {"shell20", "unluckMarker", "fireball"}
+    [20] = {"shellTriple", "unluckMarker", "fireball"}
 }

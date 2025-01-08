@@ -13,7 +13,7 @@ Sprites =
 			{  
 				Frames =
 				{
-					{ texture = path .. "/weapons/sprites/shell20.png" },
+					{ texture = path .. "/weapons/sprites/shellTriple.png" },
 					duration = 0.08,
 					mipmap = true,
 				},

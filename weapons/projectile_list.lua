@@ -80,11 +80,6 @@ if howitzer then
                     ["bracing"] = upgradedFragSplit,
                     ["default"] = upgradedFragSplit,
                 },
-                Deflect = {
-                    ["armour"] = "effects/armor_ricochet.lua",
-                    ["door"] = "effects/armor_ricochet.lua",
-                    ["shield"] = "effects/energy_shield_ricochet.lua",
-                },
                 Age = {
                     --t200 = fragSplit,
                 },
@@ -104,17 +99,25 @@ if howitzer then
         end
     end
     
-    local shell20 = DeepCopy(howitzer)
-    shell20.SaveName = "shell20"
-    shell20.ProjectileDamage = 750
-    shell20.AntiAirHitpoints = 110
-    shell20.Impact = 500000
-    shell20.ProjectileSprite = path.. "/weapons/sprites/shell20.png"
-    shell20.ProjectileThickness = 10.0
-    shell20.ProjectileShootDownRadius = 60
-    shell20.DndProjectile = true
-    shell20.CollidesWithLike = false
-    Projectiles[#Projectiles+1] = shell20
+    local shellTriple = DeepCopy(howitzer)
+    shellTriple.SaveName = "shellTriple"
+    shellTriple.ProjectileDamage = shellTriple.ProjectileDamage
+    shellTriple.AntiAirHitpoints = shellTriple.AntiAirHitpoints*1.25
+    shellTriple.ProjectileSplashDamageMaxRadius = shellTriple.ProjectileSplashDamageMaxRadius*1.25
+    shellTriple.DamageMultiplier = 
+    {
+        { SaveName = "armour", Direct = 1, Splash = 10 },
+        { SaveName = "door", Direct = 1, Splash = 10 }
+        
+    }
+    shellTriple.Impact = 500000
+    shellTriple.ProjectileSprite = path.. "/weapons/sprites/shellTriple.png"
+    shellTriple.ProjectileThickness = 10.0
+    shellTriple.ProjectileShootDownRadius = 60
+    shellTriple.DndProjectile = true
+    shellTriple.CollidesWithLike = false
+    shellTriple.EnemyCanTeleport = false
+    Projectiles[#Projectiles+1] = shellTriple
 
     local fireball = DeepCopy(howitzer)
     fireball.SaveName = "fireball"
@@ -144,7 +147,7 @@ if unluckMarker then
 		{
 			Name = "Root",
 			Angle = 0,
-			Sprite = path.. "/weapons/sprites/shell20.png",
+			Sprite = path.. "/weapons/sprites/shellTriple.png",
 			PivotOffset = {0, 0},
 			Scale = 2.5,
 		}
@@ -231,10 +234,15 @@ local shellShrapnel = DeepCopy(FindProjectile("sniper2"))
         },
         Deflect = 
         {
-            ["armour"] = { Effect = "effects/armor_ricochet.lua", Splash = false },
-            ["door"] = { Effect = "effects/armor_ricochet.lua", Splash = false },
             ["shield"] = { Effect = "effects/energy_shield_ricochet.lua", Splash = false },
         },
+    }
+    shellShrapnel.PenetrationDamage = 6*150
+    shellShrapnel.MomentumThreshold =
+    {
+        ["bracing"] = { Reflect = 0, Penetrate = 0 }, 
+        ["armour"] = { Reflect = 0, Penetrate = 0 },
+        ["door"] = { Reflect = 0, Penetrate = 0 },
     }
     --[[shellShrapnel.DamageMultiplier = 
     {
@@ -298,6 +306,8 @@ if unluckShell then
 	unluckShell.AntiAirHitpoints = 11
     unluckShell.DamageMultiplier = {}
     unluckShell.CollidesWithLike = false
+    unluckShell.EMPRadius=320
+    unluckShell.EMPDuration=10
     unluckShell.Projectile =
 	{
 		Root =
@@ -310,5 +320,3 @@ if unluckShell then
 	}
 	Projectiles[#Projectiles+1] = unluckShell
 end
-
-table.insert(Projectiles, myNewProjectile)

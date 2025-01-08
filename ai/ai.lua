@@ -17,7 +17,7 @@ ShootableProjectile["shell16"] = true
 ShootableProjectile["shell17"] = true
 ShootableProjectile["shell18"] = true
 ShootableProjectile["shell19"] = true
-ShootableProjectile["shell20"] = true
+ShootableProjectile["shellTriple"] = true
 ShootableProjectile["unluckMarker"] = true
 ShootableProjectile["fireball"] = true
 
