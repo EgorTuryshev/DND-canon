@@ -32,6 +32,7 @@ if howitzer then
         newShell.ProjectileThickness = 10.0
         newShell.ProjectileShootDownRadius = 60
         newShell.DndProjectile = true
+        newShell.Effects.Impact["firebeam"] = { Projectile = { Count = 1, Type = newShell.SaveName, StdDev = 0 }, Splash = false, Terminate = true, KeepLifespan = true, PosT = 1, Offset = 0 }
         newShell.ProjectileIncendiary = false
         newShell.CollidesWithLike = false
         newShell.DestroyShields = config.shield.DestroyShields
@@ -105,6 +106,7 @@ if howitzer then
     shellTriple.ProjectileDamage = shellTriple.ProjectileDamage
     shellTriple.AntiAirHitpoints = shellTriple.AntiAirHitpoints*1.25
     shellTriple.ProjectileSplashDamageMaxRadius = shellTriple.ProjectileSplashDamageMaxRadius*1.25
+    shellTriple.Effects.Impact["firebeam"] = { Projectile = { Count = 1, Type = shellTriple.SaveName, StdDev = 0 }, Splash = false, Terminate = true, KeepLifespan = true, PosT = 1, Offset = 0 }
     shellTriple.DamageMultiplier = 
     {
         { SaveName = "armour", Direct = 1, Splash = 10 },
@@ -125,6 +127,7 @@ if howitzer then
     fireball.ProjectileDamage = 750
     fireball.AntiAirHitpoints = 110
     fireball.Impact = 500000
+    fireball.Effects.Impact["firebeam"] = { Projectile = { Count = 1, Type = fireball.SaveName, StdDev = 0 }, Splash = false, Terminate = true, KeepLifespan = true, PosT = 1, Offset = 0 }
     fireball.ProjectileSprite = path.. "/weapons/sprites/fireball.png"
     fireball.ProjectileThickness = 10.0
     fireball.ProjectileShootDownRadius = 60
@@ -301,6 +304,7 @@ local unluckShell = DeepCopy(FindProjectile("howitzer"))
 if unluckShell then
 	unluckShell.SaveName = "unluckShell"
 	unluckShell.ProjectileDamage = 100
+    unluckShell.Effects.Impact["firebeam"] = { Projectile = { Count = 1, Type = unluckShell.SaveName, StdDev = 0 }, Splash = false, Terminate = true, KeepLifespan = true, PosT = 1, Offset = 0 }
 	unluckShell.ProjectileSplashDamage = 90
 	unluckShell.ProjectileSplashDamageMaxRadius = 130
 	unluckShell.Gravity = unluckShell.Gravity * 1.35

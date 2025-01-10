@@ -1,4 +1,3 @@
--- Important Line!
 -- Position for roll ending effect for both teams (angular distance of a hardpoint)
 RollEffectAngularDistance = 200
 
@@ -8,7 +7,6 @@ SinPhaseShift = 0.02 -- Phase offset for the sinewave (not used currently)
 SinFrequencyModifier = 3 -- How frequently the projectile does ∿∿wObBlE∿∿
 SinAmplitudeModifier = 3 -- How deep is the Sinewave motion
 TimeToMaxSin = 3 -- Time interval of how fast the projectile reaches max amplitude point in seconds. Why this exists? IDK. Nobody really does.
-Reload = 35
 
 -- Piecewise function-like table for defining power of each range of d20 rolls
 ProjectileConfigs = 
@@ -51,3 +49,61 @@ ProjectileVariations =
     [19] = {"shell19"},
     [20] = {"shellTriple", "unluckMarker", "fireball"}
 }
+
+ShellScripts = {
+    DoShell_1_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
+    end,
+    DoShell_2_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellMagnet", "", (teamId % 100 == 1) and 2 or 1,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        --Log(tostring((teamId % 100 == 1) and 2 or 1))
+    end,
+    DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+    end,
+    DoShell_4_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+    end,
+    DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
+    end,
+    DoShell_6_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_7_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_8_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_9_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_10_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_11_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_12_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_13_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_14_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_15_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_16_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_17_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_18_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_19_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+    end,
+    DoShell_20_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
+        if proj == "shellTriple" then
+            CreateDeviation(3, proj, teamId, pos, velocity, age, projectileId)
+            CreateDeviation(-3, proj, teamId, pos, velocity, age, projectileId)
+        end
+    end}

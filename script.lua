@@ -1,63 +1,9 @@
 dofile("scripts/forts.lua")
 dofile(path .. "/globals.lua")
+dofile(path .. "/misc.lua")
 
-ShellScripts = {
-    DoShell_1_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        ScheduleCall(0, ApplyDamageToDevice, origWeaponId, 10000)
-    end,
-    DoShell_2_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellMagnet", "", (teamId % 100 == 1) and 2 or 1,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        --Log(tostring((teamId % 100 == 1) and 2 or 1))
-    end,
-    DoShell_3_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("effectShellEMP", "", teamId,Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-    end,
-    DoShell_4_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("effectShellSmoke", "", teamId, Vec3(pos.x, pos.y+150), Vec3(0,0), age)
-        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-    end,
-    DoShell_5_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        dlc2_CreateProjectile("effectShellFire", "", teamId, Vec3(pos.x, pos.y+50), Vec3(0,0), age)
-    end,
-    DoShell_6_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_7_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_8_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_9_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_10_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_11_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_12_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_13_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_14_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_15_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_16_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_17_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_18_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_19_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-    end,
-    DoShell_20_Script = function (origWeaponId, proj, teamId, pos, velocity, age, projectileId)
-        if proj == "shellTriple" then
-            CreateDeviation(3, proj, teamId, pos, velocity, age, projectileId)
-            CreateDeviation(-3, proj, teamId, pos, velocity, age, projectileId)
-        end
-    end}
+Team1Pool = {}
+Team2Pool = {}
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     if(IsProjectileSin(GetNodeProjectileSaveName(projectileNodeId))) then
@@ -88,7 +34,14 @@ function OnWeaponFiredpcall(teamId, saveName, weaponId, projectileNodeId, projec
 end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
-    local roll = GetRandomInteger(1, 20, "dice roll")
+    local roll
+    if teamId%100 == 1 then
+		roll = Team1Pool[1]
+        Team1Pool = ContinueBalancedPool(Team1Pool)
+	elseif teamId%100 == 2 then
+		roll = Team2Pool[1]
+        Team2Pool = ContinueBalancedPool(Team2Pool)
+	end
     --roll = 20
     local variations = ProjectileVariations[roll]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
@@ -176,121 +129,6 @@ function OnWeaponFiredEnd(teamId, saveName, weaponId)
 	end
 end
 
-function Load()
-    if not data.AgeTriggers then data.AgeTriggers = {} end
-    EnableWeapon("unluckStorm", false, 1)
-	EnableWeapon("unluckStorm", false, 2)
-    if Projectiles then
-        for i = #Projectiles, 1, -1 do
-            local proj = Projectiles[i]
-            if proj then
-                DestroyProjectile(proj)
-                table.remove(Projectiles, i)
-            end
-        end
-    end
-
-    for key in pairs(data.AgeTriggers) do
-        data.AgeTriggers[key] = nil
-    end
-end
----------------------------------------------------------------------------------------------------------
-function Vec3MultiplyScalar(vec, scalar)
-    return {x = vec.x * scalar, y = vec.y * scalar, z = vec.z * scalar}
-end
-
-function VelocityByDeviationAngle(deviationAngleDegree, velocity)
-	local rad = math.pi / 180
-	local sin_angle = math.sin(deviationAngleDegree * rad)
-	local cos_angle = math.cos(deviationAngleDegree * rad)
-
-	return Vec3(velocity.x * cos_angle - velocity.y * sin_angle, velocity.x * sin_angle + velocity.y * cos_angle)
-end
-
-function IsShellNumberBelowOrEqual(name, number)
-
-    for i = 1,number do
-        if name == "shell" .. i then
-            return true
-        end
-    end
-    return false
-
-end
-
-function IsShellNumberGreater(name, number)
-    for i = number+1, 20 do
-        if name == "shell" .. i then
-            return true
-        end
-    end
-    return false
-
-end
-
--- Функция для проверки попадания в конфигурацию с isSin = true
-function IsProjectileSin(shellName)
-    -- Извлекаем номер снаряда из строки (например, "shell1" -> 1)
-    local shellNumber = tonumber(string.match(shellName, "^shell(%d+)$"))
-    if not shellNumber then return false end -- Если номер не найден, возвращаем false
-
-    -- Проходим по всем конфигурациям
-    for _, config in ipairs(ProjectileConfigs) do
-        -- Проверяем, входит ли номер в диапазон и имеет ли isSin = true
-        if shellNumber >= config.range[1] and shellNumber <= config.range[2] and config.isSin == true then
-            return true -- Снаряд попадает в нужную конфигурацию
-        end
-    end
-
-    return false -- Если не найдено, возвращаем false
-end
-
-function SetProjectileVelocity(nodeId, teamId, velocity)
-    local projCurrentVelocity = NodeVelocity(nodeId)
-    local projMass = GetProjectileParamInt(GetNodeProjectileSaveName(nodeId), teamId, "ProjectileMass", 1)
-    dlc2_ApplyForce(nodeId, Vec3MultiplyScalar(velocity - projCurrentVelocity, projMass / data.updateDelta))
-end
-
-function GetRollEffectPos(origWeaponId)
-    local pos = GetWeaponHardpointPosition(origWeaponId)
-    local angle = GetFireAngle(origWeaponId)
-
-    return Vec3(pos.x + RollEffectAngularDistance * math.sin(angle), pos.y + RollEffectAngularDistance * math.cos(angle))
-end
-
-function KeepSinTrajectory(id, teamId, timesrepeated)
-    if not NodeExists(id) then return end
-    timesrepeated = timesrepeated + 1
-    local velocity = NodeVelocity(id)
-	local amplitude
-    local time = timesrepeated * DeltaTimeBetweenCalls * SinFrequencyModifier-- + SinPhaseShift
-	
-	if timesrepeated * DeltaTimeBetweenCalls < TimeToMaxSin then
-		amplitude = timesrepeated * DeltaTimeBetweenCalls * SinAmplitudeModifier
-	else
-		amplitude = TimeToMaxSin * SinAmplitudeModifier
-	end
-	
-	local deviationAngle = math.sin(time) * amplitude
-	
-    local newVelocity = VelocityByDeviationAngle(deviationAngle,velocity)
-    SetProjectileVelocity(id, teamId, newVelocity)
-    ScheduleCall(DeltaTimeBetweenCalls, KeepSinTrajectory, id, teamId, timesrepeated)
-end
-
-function ProtectedFunction(func,...)
-    local success,output = pcall(func,unpack(arg))
-    if not success then
-        LogW(RGBAtoHex(255, 200, 100, 255, true)..str.ErrorMessage)
-        Log("Error: "..output)
-    end
-end
-
-function RGBAtoHex(r, g, b, a, UTF16)
-    local hex = string.format("%02X%02X%02X%02X", r, g, b, a)
-    if UTF16 == true then return L"[HL=" .. towstring(hex) .. L"]" else return "[HL=" .. hex .. "]" end
-end
-
 function CreateDeviation(degreeAngle, proj, teamId, pos, velocity, age, origWeaponId)
 	local deviation = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, VelocityByDeviationAngle(degreeAngle, velocity), age)	
 
@@ -346,4 +184,52 @@ function CallUnluckStorm(markerPOS, team, clientId)
 	EnableWeapon("unluckStorm", false, 1)
     EnableWeapon("unluckStorm", false, 2)
 	--continue to event OnWeaponFiredEnd to delete device
+end
+
+function Load()
+    if not data.AgeTriggers then data.AgeTriggers = {} end
+    TP1 = {}
+    TP2 = {}
+    for _ = 1, 100 do
+        Team1Pool = ContinueBalancedPool(Team1Pool)
+        Team2Pool = ContinueBalancedPool(Team2Pool)
+        table.insert(TP1, GetRandomInteger(1, 20, "dice_uniform_start"))
+        table.insert(TP2, GetRandomInteger(1, 20, "dice_uniform_start"))
+    end
+    Log(table.concat(Team1Pool, ", "))
+    Log(table.concat(Team2Pool, ", "))
+
+    local sumTeam1 = 0
+    local sumTeam2 = 0
+    local sumTest1 = 0
+    local sumTest2 = 0
+
+    for i = 1, 100 do
+        sumTeam1 = sumTeam1 + Team1Pool[i]
+        sumTeam2 = sumTeam2 + Team2Pool[i]
+        sumTest1 = sumTest1 + TP1[i]
+        sumTest2 = sumTest2 + TP2[i]
+    end
+
+    Log(tostring(sumTeam1))
+    Log(tostring(sumTeam2))
+
+    Log(tostring(sumTest1))
+    Log(tostring(sumTest2))
+
+    EnableWeapon("unluckStorm", false, 1)
+	EnableWeapon("unluckStorm", false, 2)
+    if Projectiles then
+        for i = #Projectiles, 1, -1 do
+            local proj = Projectiles[i]
+            if proj then
+                DestroyProjectile(proj)
+                table.remove(Projectiles, i)
+            end
+        end
+    end
+
+    for key in pairs(data.AgeTriggers) do
+        data.AgeTriggers[key] = nil
+    end
 end

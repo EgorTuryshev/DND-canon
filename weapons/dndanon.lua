@@ -1,6 +1,5 @@
 dofile("mods/dlc1_weapons/weapons/howitzer.lua")
 dofile("scripts/device_utility.lua")
-dofile(path .. "/globals.lua")
 
 Sprites = {}
 Projectile = "shell1"
@@ -12,14 +11,14 @@ CompleteEffect = "effects/device_complete.lua"
 DestroyEffect = "mods/dlc1_weapons/effects/howitzer_explode.lua"
 ReloadEffect = "mods/dlc1_weapons/effects/reload_howitzer.lua"
 WeaponMass = 150
-MinFireAngle = 10
+MinFireAngle = 0
 MaxFireAngle = 60
 Hitpoints = 350
 DeviceSplashDamage = 375
 DeviceSplashMaxRadius = 230
 StructureSplashDamage = 230
 ProjectileSplashDamageMaxRadius = 230
-ReloadTime = Reload
+ReloadTime = 35
 MetalFireCost = 120
 EnergyFireCost = 6500
 Recoil = 2000000
