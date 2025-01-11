@@ -2,8 +2,8 @@ dofile("scripts/forts.lua")
 dofile(path .. "/globals.lua")
 dofile(path .. "/misc.lua")
 
-Team1Pool = {}
-Team2Pool = {}
+Team1Pools = {}
+Team2Pools = {}
 
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     if(IsProjectileSin(GetNodeProjectileSaveName(projectileNodeId))) then
@@ -35,12 +35,17 @@ end
 
 function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velocity, age, agetrigger)
     local roll
+    local playerNumber = GetPlayerNumber(teamId) -- DO NOT USE playerNumber ANYWHERE ELSE PLS!!!
+    -- can be bad with ai maps tho
     if teamId%100 == 1 then
-		roll = Team1Pool[1]
-        Team1Pool = ContinueBalancedPool(Team1Pool)
+		roll = Team1Pools[playerNumber][1]
+        ContinueBalancedPool(Team1Pools[playerNumber])
 	elseif teamId%100 == 2 then
-		roll = Team2Pool[1]
-        Team2Pool = ContinueBalancedPool(Team2Pool)
+        if teamId == 2 then
+            playerNumber = 1
+        end
+		roll = Team2Pools[playerNumber][1]
+        ContinueBalancedPool(Team2Pools[playerNumber])
 	end
     --roll = 20
     local variations = ProjectileVariations[roll]
@@ -188,34 +193,30 @@ end
 
 function Load()
     if not data.AgeTriggers then data.AgeTriggers = {} end
-    TP1 = {}
-    TP2 = {}
-    for _ = 1, 100 do
-        Team1Pool = ContinueBalancedPool(Team1Pool)
-        Team2Pool = ContinueBalancedPool(Team2Pool)
-        table.insert(TP1, GetRandomInteger(1, 20, "dice_uniform_start"))
-        table.insert(TP2, GetRandomInteger(1, 20, "dice_uniform_start"))
-    end
-    Log(table.concat(Team1Pool, ", "))
-    Log(table.concat(Team2Pool, ", "))
+    local teamCount = GetTeamCount()
+    -- Заполняем пулы команд в соответствии с их составами (втч асимметричные)
+    for i = 1, teamCount do
+        local teamId = GetTeamId(i)
+        local side = teamId % 100
 
-    local sumTeam1 = 0
-    local sumTeam2 = 0
-    local sumTest1 = 0
-    local sumTest2 = 0
-
-    for i = 1, 100 do
-        sumTeam1 = sumTeam1 + Team1Pool[i]
-        sumTeam2 = sumTeam2 + Team2Pool[i]
-        sumTest1 = sumTest1 + TP1[i]
-        sumTest2 = sumTest2 + TP2[i]
+        if side == 1 then
+            table.insert(Team1Pools, {})
+        elseif side == 2 then
+            table.insert(Team2Pools, {})
+        end
     end
 
-    Log(tostring(sumTeam1))
-    Log(tostring(sumTeam2))
+    for _ = 1, RngPoolLength do
+        for _, value in ipairs(Team1Pools) do
+            ContinueBalancedPool(value)
+        end
+        for _, value in ipairs(Team2Pools) do
+            ContinueBalancedPool(value)
+        end
+    end
 
-    Log(tostring(sumTest1))
-    Log(tostring(sumTest2))
+    -- Log(table.concat(Team1Pools[1], ", "))
+    -- Log(table.concat(Team2Pools[1], ", "))
 
     EnableWeapon("unluckStorm", false, 1)
 	EnableWeapon("unluckStorm", false, 2)

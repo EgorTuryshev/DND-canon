@@ -1,72 +1,13 @@
--- Вспомогательная функция: получаем float в [0, 1)
--- за счёт деления случайного целого на 1,000,000
-local function GetRandomFloat01(tag)
-    return GetRandomFloat(0, 1, tag)
+-- ГСЧ? Где!?
+function ContinueBalancedPool(currentPool)
+    table.insert(currentPool, GetRandomInteger(1, 20, "dice_roll"))
+    if #currentPool >= RngPoolLength then
+        table.remove(currentPool, 1)
+    end
 end
 
--- Генерация следующего псевдо-сбалансированного значения
--- с учётом "средней удачи" по пулу
-function ContinueBalancedPool(currentPool)
-    local fullRange = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}
-    
-    -- Порог, до которого кидаем честно
-    local FREE_ROLLS = 2  
-    if #currentPool < FREE_ROLLS then
-        table.insert(currentPool, GetRandomInteger(1, 20, "dice_uniform_start"))
-        return currentPool
-    end
-    
-    -- Считаем meanValue (скользящее среднее тоже можно)
-    local sum = 0
-    for i = 1, #currentPool do
-        sum = sum + currentPool[i]
-    end
-    local meanValue = sum / #currentPool
-    
-    -- Настраиваем параметры "баланса"
-    local k = 0.15       -- Сила коррекции
-    local p = 0.01      -- Подмес "честного" рандома
-    local base = 0.2   -- Минимальный уровень веса для снижения "гауссовского" распределения
-
-    -- Считаем веса
-    local weights = {}
-    local totalWeight = 0
-    for _, x in ipairs(fullRange) do
-        local diff = math.abs(meanValue - x)
-        local wBal = math.exp(-k * diff)
-        local w = p*1 + (1-p)*(base + wBal)
-        weights[x] = w
-        totalWeight = totalWeight + w
-    end
-
-    -- Log("TW: " .. tostring(totalWeight))
-
-    local rand = GetRandomFloat01("dice_weighted_select") * totalWeight
-    -- Log("Rand: " .. tostring(rand))
-    local cumulative = 0
-    local newValue = 1
-    for _, x in ipairs(fullRange) do
-        cumulative = cumulative + weights[x]
-        if rand <= cumulative then
-            newValue = x
-            break
-        end
-    end
-
-    -- Собираем новый пул
-    local newPool = {}
-    if #currentPool >= 100 then
-        for i = 2, #currentPool do
-            table.insert(newPool, currentPool[i])
-        end
-    else
-        for i = 1, #currentPool do
-            table.insert(newPool, currentPool[i])
-        end
-    end
-    table.insert(newPool, newValue)
-
-    return newPool
+function GetPlayerNumber(teamId)
+    return (teamId < 100) and teamId or math.floor(teamId / 100)
 end
 
 function GetRollEffectPos(origWeaponId)
