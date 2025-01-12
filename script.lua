@@ -2,9 +2,6 @@ dofile("scripts/forts.lua")
 dofile(path .. "/globals.lua")
 dofile(path .. "/misc.lua")
 
-Team1Pools = {}
-Team2Pools = {}
-
 function OnWeaponFired(teamId, saveName, weaponId, projectileNodeId, projectileNodeIdFrom)
     if(IsProjectileSin(GetNodeProjectileSaveName(projectileNodeId))) then
         KeepSinTrajectory(projectileNodeId, teamId, 0)
@@ -38,14 +35,14 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
     local playerNumber = GetPlayerNumber(teamId) -- DO NOT USE playerNumber ANYWHERE ELSE PLS!!!
     -- can be bad with ai maps tho
     if teamId%100 == 1 then
-		roll = Team1Pools[playerNumber][1]
-        ContinueBalancedPool(Team1Pools[playerNumber])
+		roll = data.Team1Pools[playerNumber][1]
+        ContinueBalancedPool(data.Team1Pools[playerNumber])
 	elseif teamId%100 == 2 then
         if teamId == 2 then
             playerNumber = 1
         end
-		roll = Team2Pools[playerNumber][1]
-        ContinueBalancedPool(Team2Pools[playerNumber])
+		roll = data.Team2Pools[playerNumber][1]
+        ContinueBalancedPool(data.Team2Pools[playerNumber])
 	end
     --roll = 20
     local variations = ProjectileVariations[roll]
@@ -193,6 +190,10 @@ end
 
 function Load()
     if not data.AgeTriggers then data.AgeTriggers = {} end
+
+    if not data.Team1Pools then data.Team1Pools = {} end
+    if not data.Team2Pools then data.Team2Pools = {} end
+
     local teamCount = GetTeamCount()
     -- Заполняем пулы команд в соответствии с их составами (втч асимметричные)
     for i = 1, teamCount do
@@ -200,17 +201,17 @@ function Load()
         local side = teamId % 100
 
         if side == 1 then
-            table.insert(Team1Pools, {})
+            table.insert(data.Team1Pools, {})
         elseif side == 2 then
-            table.insert(Team2Pools, {})
+            table.insert(data.Team2Pools, {})
         end
     end
 
     for _ = 1, RngPoolLength do
-        for _, value in ipairs(Team1Pools) do
+        for _, value in ipairs(data.Team1Pools) do
             ContinueBalancedPool(value)
         end
-        for _, value in ipairs(Team2Pools) do
+        for _, value in ipairs(data.Team2Pools) do
             ContinueBalancedPool(value)
         end
     end
