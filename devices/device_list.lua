@@ -26,3 +26,31 @@ table.insert(Devices,
 	BuildOnGroundOnly = false,
 	SelectEffect = "ui/hud/devices/ui_devices",
 })
+
+
+table.insert(Sprites, DetailSprite("hud-detail-sponge-module", "HUD-Details-Sponge_Module", path))
+table.insert(Sprites, ButtonSprite("hud-sponge-module-icon", "HUD/HUD_Sponge_Module", nil, ButtonSpriteBottom, nil, nil, path))
+
+table.insert(Devices,
+{
+	Enabled = true,
+	SaveName = "sponge_module",
+	FileName = path .. "/devices/spongemodule/sponge_module.lua",
+	Icon = "hud-sponge-module-icon",
+	Detail = "hud-detail-sponge-module",
+	--Prerequisite = "upgrade",
+	BuildTimeComplete = 80.0,
+	ScrapPeriod = 12,
+	MetalCost = 400,
+	EnergyCost = 5000,
+	MetalRepairCost = 300,
+	EnergyRepairCost = 2500,
+	MetalReclaimMin = 0.1,
+	MetalReclaimMax = 0.5,
+	EnergyReclaimMin = 0.1,
+	EnergyReclaimMax = 0.5,
+	PopulationCap = 1,
+	MaxUpAngle = StandardMaxUpAngle,
+	BuildOnGroundOnly = false,
+	SelectEffect = "ui/hud/devices/ui_devices",
+})

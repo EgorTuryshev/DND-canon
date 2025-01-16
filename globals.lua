@@ -13,7 +13,7 @@ RngPoolLength = 60 -- How long is the pre-generated pool for each player (team),
 RngCorrectionStrength = 0.1 -- Currently not used
 
 IncrementModuleRadius = 220
-
+SpongeModuleRadius = 500
 
 -- Piecewise function-like table for defining power of each range of d20 rolls
 ProjectileConfigs = 

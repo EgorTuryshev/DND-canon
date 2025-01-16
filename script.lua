@@ -52,7 +52,7 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
             incrementModulesNumber = 19-roll
         end
     end
-    --roll = 20
+    roll = 1
     local variations = ProjectileVariations[roll + incrementModulesNumber]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
@@ -60,6 +60,14 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
 
     local projectileId = dlc2_CreateProjectile(proj.."_nocol", proj, teamId, pos, velocity, age)
     SpawnEffect(path .. "/effects/roll_" .. roll .. ".lua", GetRollEffectPos(origWeaponId))
+
+    if roll < 6 then
+        local spongepos = FindSpongeModule (GetDevicePosition(origWeaponId),teamId)
+        if spongepos ~= nil then
+            pos = spongepos
+            origWeaponId = GetDeviceIdAtPosition(pos)
+        end
+    end
 
     local functionName = "DoShell_" .. roll .. "_Script"
     if ShellScripts[functionName] then
@@ -192,6 +200,36 @@ function CountIncrementModules(pos, teamId)
     end
 
     return count
+end
+
+function FindSpongeModule(pos, teamId)
+    local radius = SpongeModuleRadius -- Радиус поиска
+    local sideId = teamId % 100 -- Вычисление стороны игрока
+    local deviceCount = GetDeviceCountSide(sideId) -- Количество устройств на стороне команды
+
+    -- Перебираем устройства стороны команды
+    for i = 0, deviceCount - 1 do
+        local deviceId = GetDeviceIdSide(sideId, i) -- Получаем ID устройства
+        local deviceType = GetDeviceType(deviceId)
+        local devicePosition = GetDevicePosition(deviceId)
+
+        -- Проверяем, является ли устройство "SpongeModule"
+        if deviceType == "sponge_module" then
+            local dx = devicePosition.x - pos.x
+            local dy = devicePosition.y - pos.y
+            local distance = math.sqrt(dx * dx + dy * dy)
+            
+            -- Если устройство в радиусе, возвращаем его координаты
+            if distance <= radius then
+                pos.x = devicePosition.x
+                pos.y = devicePosition.y
+                return pos
+            end
+        end
+    end
+
+    -- Если модуль не найден, возвращаем nil
+    return nil
 end
 
 
