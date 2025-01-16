@@ -44,8 +44,16 @@ function SpawnRandomProjectile(origProjectileId, origWeaponId, teamId, pos, velo
 		roll = data.Team2Pools[playerNumber][1]
         ContinueBalancedPool(data.Team2Pools[playerNumber])
 	end
+    local incrementModulesNumber = CountIncrementModules(GetDevicePosition(origWeaponId),teamId)
+    if roll == 20 or roll == 1 then
+        incrementModulesNumber=0
+    else
+        if roll + incrementModulesNumber > 19 then
+            incrementModulesNumber = 19-roll
+        end
+    end
     --roll = 20
-    local variations = ProjectileVariations[roll]
+    local variations = ProjectileVariations[roll + incrementModulesNumber]
     local selectedIndex = GetRandomInteger(1, #variations, "variation roll")
     local proj = variations[selectedIndex]
     --proj = "shellTriple"
@@ -157,6 +165,36 @@ function DeleteBeforeDestroyMinigame(teamId)  --Currently unused
         DeleteBeforeDestroyMinigame(teamId) -- there is actually a small chance of endless loop in case of empty fort
     end
 end
+
+function CountIncrementModules(pos, teamId)
+    local radius = IncrementModuleRadius
+    local count = 0
+
+    -- Получаем количество устройств на стороне команды
+    local deviceCount = GetDeviceCountSide(teamId%100)
+
+    -- Перебираем устройства команды
+    for i = 0, deviceCount - 1 do
+        local deviceId = GetDeviceIdSide(teamId%100, i)
+        local deviceType = GetDeviceType(deviceId)
+        local devicePosition = GetDevicePosition(deviceId)
+        -- Проверяем тип устройства и расстояние до введённых координат
+        if deviceType == "increment_module" then
+            local dx = devicePosition.x - pos.x
+            local dy = devicePosition.y - pos.y
+            local distance = math.sqrt(dx * dx + dy * dy)
+
+            -- Увеличиваем счётчик, если устройство находится в радиусе
+            if distance <= radius then
+                count = count + 1
+            end
+        end
+    end
+
+    return count
+end
+
+
 
 function CallUnluckStorm(markerPOS, team, clientId)
 	--get position to place weapon
